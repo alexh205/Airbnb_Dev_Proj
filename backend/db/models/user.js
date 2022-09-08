@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+const { Model, Validator } = require('sequelize');
 const bcrypt = require("bcryptjs");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -88,13 +88,15 @@ module.exports = (sequelize, DataTypes) => {
           isEmail: true,
         },
       },
-      hashedPassword: { type: DataTypes.STRING },
-      isHost: {
+      hashedPassword: {
         type: DataTypes.STRING.BINARY,
         allowNull: false,
         validate: {
           len: [60, 60],
         },
+      },
+      isHost: {
+        type: DataTypes.BOOLEAN,
       },
     },
     {
