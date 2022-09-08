@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING.BINARY,
         allowNull: false,
       },
-      host: {
+      isHost: {
         type: Sequelize.BOOLEAN,
       },
       createdAt: {

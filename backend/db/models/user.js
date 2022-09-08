@@ -1,12 +1,11 @@
 "use strict";
-const { Model, Validator } = require("sequelize");
+const { Model } = require("sequelize");
 const bcrypt = require("bcryptjs");
-
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     toSafeObject() {
-      const { id, username, email } = this; //context will be the User instance
-      return { id, username, email };
+      const { id, firstName, lastName, username, email, isHost } = this; //context will be the User instance
+      return { id, firstName, lastName, username, email, isHost };
     }
 
     validatePassword(password) {
@@ -37,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       username,
       email,
       password,
-      host,
+      isHost,
     }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
@@ -46,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         username,
         email,
         hashedPassword,
-        host,
+        isHost,
       });
       return await User.scope("currentUser").findByPk(user.id);
     }
@@ -90,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       hashedPassword: { type: DataTypes.STRING },
-      host: {
+      isHost: {
         type: DataTypes.STRING.BINARY,
         allowNull: false,
         validate: {
@@ -111,9 +110,9 @@ module.exports = (sequelize, DataTypes) => {
           attributes: {
             exclude: ["hashedPassword"],
           },
-          loginUser: {
-            attributes: {},
-          },
+        },
+        loginUser: {
+          attributes: {},
         },
       },
     }
