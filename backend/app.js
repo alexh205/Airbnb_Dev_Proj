@@ -20,7 +20,7 @@ app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 
-/* pre-request middleware */ 
+/* pre-request middleware */
 
 // Security Middleware
 if (!isProduction) {
@@ -47,6 +47,10 @@ app.use(
 );
 
 app.use(routes);
+
+app.get('/', (res,req)=> {
+  res.json('this is not working!')
+})
 
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
