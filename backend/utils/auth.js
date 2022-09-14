@@ -26,7 +26,7 @@ const setTokenCookie = (res, user) => {
   return token;
 };
 
-//? Current user is checked through JWT
+// Current user is checked through JWT
 const restoreUser = (req, res, next) => {
   // token parsed from cookies
   const { token } = req.cookies;
