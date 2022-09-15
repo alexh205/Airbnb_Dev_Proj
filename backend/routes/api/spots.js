@@ -1,23 +1,13 @@
 const express = require("express");
-const {
-  handleValidationErrors,
-  validateSpot,
-} = require("../../utils/validation");
 
-const {
-  User,
-  Spot,
-  Review,
-  Image,
-  Booking,
-  sequelize,
-} = require("../../db/models");
-const {
-  requireAuth,
-  setTokenCookie,
-  restoreUser,
-} = require("../../utils/auth");
-const { check } = require("express-validator");
+// Validation
+const { validateSpot } = require("../../utils/validation");
+
+// Models
+const { User, Spot, Review, Image } = require("../../db/models");
+
+// Authentication
+const { requireAuth, restoreUser } = require("../../utils/auth");
 
 const router = express.Router();
 
@@ -30,31 +20,37 @@ router.get("/", async (req, res) => {
   for (let spot of spots) {
     const { id } = spot;
 
-    //* Rating
+    //* Ratings
     const starRating = await Review.findAll({
       where: {
         spotId: id,
       },
     });
+
     const numReviews = starRating.length;
     let ratingTotal = 0;
+
     starRating.forEach((review) => {
       if (review.stars) ratingTotal += review.stars;
     });
+
     let avgRating;
+
     ratingTotal > 0
       ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
       : (avgRating = 0);
 
     spot.dataValues.avgRating = avgRating;
 
-    //* Image
-    let previewImage = [];
+    //* Images
+    const previewImage = [];
+
     const spotPhoto = await spot.getSpotImages({ raw: true });
 
     for (let photo of spotPhoto) {
       if (photo.imageableId === id) previewImage.push(photo.url);
     }
+
     previewImage.length > 0
       ? (spot.dataValues.previewImage = previewImage[0])
       : (spot.dataValues.previewImage = null);
@@ -67,6 +63,7 @@ router.get("/", async (req, res) => {
 
 /**********************************************************************************/
 //! create a spot
+
 router.post("/", requireAuth, validateSpot, async (req, res) => {
   const { address, city, state, country, lat, lng, name, description, price } =
     req.body;
@@ -128,18 +125,6 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
 router.get("/:spotId", async (req, res) => {
   const currentSpot = await Spot.findOne({
     where: { id: req.params.spotId },
-    include: [
-      {
-        model: Image,
-        as: "SpotImages",
-        attributes: ["id", "url"],
-      },
-      {
-        model: User,
-        as: "Owner",
-        attributes: ["id", "firstName", "lastName"],
-      },
-    ],
   });
 
   if (!currentSpot) {
@@ -149,7 +134,7 @@ router.get("/:spotId", async (req, res) => {
     });
   }
 
-  //* rating
+  //* Ratings
   const currentReview = await Review.findAll({
     where: {
       spotId: req.params.spotId,
@@ -158,16 +143,47 @@ router.get("/:spotId", async (req, res) => {
 
   const numReviews = currentReview.length;
   let ratingTotal = 0;
+
   currentReview.forEach((review) => {
     if (review.stars) ratingTotal += review.stars;
   });
+
   let avgRating;
+
   ratingTotal > 0
     ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
     : (avgRating = 0);
 
   currentSpot.dataValues.numReviews = numReviews;
   currentSpot.dataValues.avgStarRating = avgRating;
+
+  //* Images
+  let imagesList = [];
+
+  const imagesCurrSpot = await Image.findAll({
+    where: { imageableType: "Spot", imageableId: req.params.spotId },
+    attributes: ["id", "url"],
+  });
+
+  imagesCurrSpot.forEach((image) => {
+    image = image.toJSON();
+
+    imagesList.length > 0 && imagesList[0]
+      ? (imagesList[0].preview = true)
+      : (imagesList.preview = false);
+
+    imagesList.push(image);
+  });
+
+  currentSpot.dataValues.SpotImages = imagesList;
+
+  //* Owner
+  const spotOwner = await User.findOne({
+    where: { Id: currentSpot.ownerId },
+    attributes: ["id", "firstName", "lastName"],
+  });
+
+  currentSpot.dataValues.Owner = spotOwner;
 
   return res.json(currentSpot);
 });
@@ -185,6 +201,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
     });
   }
 
+  //* Owner's Authentication
   const spotOwner = currentSpot.ownerId;
 
   if (spotOwner === req.user.id) {
@@ -210,6 +227,7 @@ router.get("/:spotId/reviews", async (req, res) => {
       .json({ message: "Spot couldn't be found", statusCode: 404 });
   }
 
+  //* Reviews
   const reviews = await Review.findAll({
     where: { spotId: req.params.spotId },
     include: [
@@ -233,12 +251,12 @@ router.get("/:spotId/reviews", async (req, res) => {
 //! Get all spots for the current user
 
 router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
-
   const currSpot = await Spot.findAll({
     where: { ownerId: req.user.id },
   });
 
   for (let spot of currSpot) {
+    //* Ratings
     const starRating = await Review.findAll({
       where: {
         spotId: spot.id,
@@ -247,18 +265,22 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
 
     const numReviews = starRating.length;
     let ratingTotal = 0;
+
     starRating.forEach((review) => {
       if (review.stars) ratingTotal += review.stars;
     });
+
     let avgRating;
+
     ratingTotal > 0
       ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
       : (avgRating = 0);
 
     spot.dataValues.avgRating = avgRating;
 
-    //* Image
+    //* Images
     let previewImage = [];
+
     const spotPhoto = await spot.getSpotImages({ raw: true });
 
     for (let photo of spotPhoto) {
@@ -270,6 +292,46 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
   }
 
   return res.json(currSpot);
+});
+
+/**********************************************************************************/
+//! Add an Image based on a spotId
+
+router.post("/:spotId/images", requireAuth, async (req, res) => {
+  const currentSpot = await Spot.findOne({
+    where: { id: req.params.spotId },
+  });
+
+  if (!currentSpot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404,
+    });
+  }
+  if (currentSpot.dataValues.ownerId !== req.user.id) {
+    return res.status(403).json({
+      message: "Unauthorized",
+      statusCode: 403,
+    });
+  }
+
+  //* new Image
+  let newImage = await Image.create({
+    imageableId: currentSpot.id,
+    imageableType: "Spot",
+    url: req.body.url,
+  });
+
+  if (req.body.previewImage === true && req.body.previewImage) {
+    newImage.dataValues.preview = true;
+  } else {
+    newImage.dataValues.preview = false;
+  }
+
+  newImage = newImage.toJSON();
+  const { id, url, preview } = newImage;
+
+  return res.json({ id, url, preview });
 });
 
 module.exports = router;
