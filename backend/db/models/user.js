@@ -30,14 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async signup({
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
-      isHost,
-    }) {
+    static async signup({ firstName, lastName, username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
         firstName,
@@ -45,13 +38,25 @@ module.exports = (sequelize, DataTypes) => {
         username,
         email,
         hashedPassword,
-        isHost,
       });
       return await User.scope("currentUser").findByPk(user.id);
     }
 
     static associate(models) {
-      // define association here
+      User.hasMany(models.Spot, { foreignKey: "ownerId", onDelete: "CASCADE" });
+      User.hasMany(models.Booking, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+      User.hasMany(models.Review, {
+        foreignKey: "userId",
+        onDelete: "CASCADE",
+      });
+      User.hasOne(models.Image, {
+        foreignKey: "imageableId",
+        constraints: false,
+        scope: { imageableType: "User" },
+      });
     }
   }
   User.init(
@@ -94,9 +99,6 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           len: [60, 60],
         },
-      },
-      isHost: {
-        type: DataTypes.BOOLEAN,
       },
     },
     {
