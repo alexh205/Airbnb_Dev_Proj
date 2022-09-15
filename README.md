@@ -2,7 +2,7 @@
 
 ## Database Schema Design
 
-![AirBnB DB Schema](https://user-images.githubusercontent.com/95322089/188509719-1ebdefe7-0f5f-4a5e-84b4-f648c75baf9a.jpg)
+![Screen Shot 2022-09-14 at 8 26 48 PM](https://user-images.githubusercontent.com/95322089/190285746-b20fd0e5-3845-47c9-a03c-543233cc4b0a.jpg)
 
 ## API Documentation
 
@@ -52,7 +52,7 @@ Returns the information about the current user that is logged in.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/profile
+  * URL: /api/session
   * Body: none
 
 * Successful Response
@@ -79,7 +79,7 @@ information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /api/login
+  * URL: /api/session
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -146,7 +146,7 @@ user's information.
 * Require Authentication: false
 * Request
   * Method: POST
-  * URL: /api/sign-up
+  * URL: /api/users
   * Headers:
     * Content-Type: application/json
   * Body:
@@ -278,7 +278,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/profile/spots
+  * URL: /api/spots/profile/current
   * Body: none
 
 * Successful Response
@@ -632,7 +632,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/profile/reviews
+  * URL: /api/reviews/currentUser
   * Body: none
 
 * Successful Response
@@ -1409,7 +1409,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /spots?page=1&size=2&minLat=2.5&maxLat=4.5&minLng=3.0&maxLng=4.5&minPrice=90.5&maxPrice=200.8
+  * URL: /spots/filters
   * Query Parameters
     * page: integer, minimum: 0, maximum: 10, default: 0
     * size: integer, minimum: 0, maximum: 20, default: 20

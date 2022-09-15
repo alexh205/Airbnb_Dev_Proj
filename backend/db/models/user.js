@@ -30,14 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     }
 
-    static async signup({
-      firstName,
-      lastName,
-      username,
-      email,
-      password,
-      isHost,
-    }) {
+    static async signup({ firstName, lastName, username, email, password }) {
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({
         firstName,
@@ -45,7 +38,6 @@ module.exports = (sequelize, DataTypes) => {
         username,
         email,
         hashedPassword,
-        isHost,
       });
       return await User.scope("currentUser").findByPk(user.id);
     }
@@ -107,9 +99,6 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           len: [60, 60],
         },
-      },
-      isHost: {
-        type: DataTypes.BOOLEAN,
       },
     },
     {
