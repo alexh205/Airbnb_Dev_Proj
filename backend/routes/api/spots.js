@@ -353,6 +353,7 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
   });
 
   for (let spot of currSpot) {
+    const { id } = currSpot;
     //* Ratings
     const starRating = await Review.findAll({
       where: {
@@ -429,6 +430,44 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
   const { id, url, preview } = newImage;
 
   return res.json({ id, url, preview });
+});
+
+/**********************************************************************************/
+
+//! Create a Review for a Spot based on the Spot's id
+
+router.post("/:spotId/reviews", requireAuth, async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot) {
+    return res.status(404).json({
+      message: "Spot couldn't be found",
+      statusCode: 404,
+    });
+  }
+
+  const spotReviews = await Review.findAll({
+    where: { spotId: req.params.spotId },
+  });
+
+  for (let spotReview of spotReviews) {
+    if (spotReview.userId === req.user.id) {
+      return res.status(403).json({
+        message: "User already has a review for this spot",
+        statusCode: 403,
+      });
+    }
+  }
+
+  const { review, stars } = req.body;
+  const newReview = await Review.create({
+    userId: req.user.id,
+    spotId: req.params.spotId,
+    review: review,
+    stars: stars,
+  });
+
+  return res.status(201).json(newReview);
 });
 
 module.exports = router;
