@@ -1,7 +1,10 @@
 const express = require("express");
 
 // Validation
-const { validateSpot } = require("../../utils/validation");
+const {
+  validateSpot,
+  filterQueryValidator,
+} = require("../../utils/validation");
 
 // Models
 const { User, Spot, Review, Image } = require("../../db/models");
@@ -10,6 +13,7 @@ const { User, Spot, Review, Image } = require("../../db/models");
 const { requireAuth, restoreUser } = require("../../utils/auth");
 
 const router = express.Router();
+const { Op } = require("sequelize");
 
 /**********************************************************************************/
 //! Get all spots
@@ -117,6 +121,99 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   });
 
   return res.json(editedSpot);
+});
+
+/**********************************************************************************/
+//! Get all spots by query filters
+
+router.get("/filters", filterQueryValidator, async (req, res) => {
+  const { maxLat, minLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+
+  const query = {
+    where: {},
+  };
+
+  //* Page filters
+  let page = req.query.page;
+  !page ? (page = 0) : (page = page);
+
+  //* Size filters
+  let size = req.query.size;
+  !size ? (size = 20) : (size = size);
+
+  //* Limit & Offset parameters
+  if (page >= 0 && size >= 0) {
+    query.limit = size;
+    query.offset = size * (page - 1);
+  }
+
+  //* Latitude filters
+  if (minLat && maxLat) {
+    query.where.lat = { [Op.lt]: req.query.maxLat, [Op.gt]: req.query.minLat };
+  } else if (minLat && !maxLat) {
+    query.where.lat = {
+      [Op.gt]: req.query.minLat,
+    };
+  } else if (!minLat && maxLat) {
+    query.where.lat = {
+      [Op.lt]: req.query.maxLat,
+    };
+  }
+
+  //* Longitude filters
+  if (minLng && maxLng) {
+    query.where.lng = { [Op.lt]: req.query.maxLng, [Op.gt]: req.query.minLng };
+  } else if (minLng && !maxLng) {
+    query.where.lng = {
+      [Op.gt]: req.query.minLng,
+    };
+  } else if (!minLng && maxLng) {
+    query.where.lng = {
+      [Op.lt]: req.query.maxLng,
+    };
+  }
+
+  //* Price filters
+  if (minPrice && maxPrice) {
+    query.where.price = {
+      [Op.lt]: req.query.maxPrice,
+      [Op.gt]: req.query.minPrice,
+    };
+  } else if (minPrice && !maxPrice) {
+    query.where.price = {
+      [Op.gt]: req.query.minPrice,
+    };
+  } else if (!minPrice && maxPrice) {
+    query.where.price = {
+      [Op.lt]: req.query.maxPrice,
+    };
+  }
+
+  //* Query for all the spots
+  const spots = await Spot.findAll(query);
+
+  for (let spot of spots) {
+    const { id } = spot;
+
+    //* previewImages
+    const previewImage = [];
+
+    const spotPhoto = await spot.getSpotImages({ raw: true });
+
+    for (let photo of spotPhoto) {
+      if (photo.imageableId === id) previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (spot.dataValues.previewImage = previewImage[0])
+      : (spot.dataValues.previewImage = null);
+  }
+
+  return res.json({
+    spots,
+    page: page,
+    size: size,
+  });
 });
 
 /**********************************************************************************/
