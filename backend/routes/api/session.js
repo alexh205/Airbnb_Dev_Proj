@@ -1,22 +1,23 @@
 const express = require("express");
 
-const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+} = require("../../utils/auth");
 const { User } = require("../../db/models");
 
-const { check } = require("express-validator");
-const {
-  handleValidationErrors,
-  validateLogin,
-} = require("../../utils/validation");
+const { validateLogin } = require("../../utils/validation");
 
 const router = express.Router();
 
-// Log in
+//! Log in
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
   const user = await User.login({ credential, password });
 
+  //* User validation
   if (!user) {
     const err = new Error("Login failed");
     err.status = 401;
@@ -25,27 +26,55 @@ router.post("/", validateLogin, async (req, res, next) => {
     return next(err);
   }
 
-  await setTokenCookie(res, user);
-
-  return res.json({
-    user,
+  //* Excluding undesired parameters
+  const loginUser = await User.findOne({
+    where: { id: user.id },
+    attributes: { exclude: ["createdAt", "updatedAt", "hashedPassword"] },
   });
+
+  loginUser.dataValues.token = await setTokenCookie(res, user);
+
+  return res.json(loginUser);
 });
 
-// Log out
+//! Log out
 router.delete("/", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
 });
 
-// Restore session user
-router.get("/", restoreUser, (req, res) => {
+// //! Restore session user
+// router.get("/", restoreUser, (req, res) => {
+//   const { user } = req;
+//   if (user) {
+//     return res.json({
+//       user: user.toSafeObject(),
+//     });
+//   } else return res.json({});
+// });
+
+//! Get current User
+router.get("/", restoreUser, requireAuth, async (req, res) => {
   const { user } = req;
-  if (user) {
-    return res.json({
-      user: user.toSafeObject(),
-    });
-  } else return res.json({});
+
+  //* Excluding undesired parameters
+  const currUser = await User.findOne({
+    where: { id: user.id },
+    attributes: { exclude: ["createdAt", "updatedAt"] },
+  });
+
+  currUser.token = await setTokenCookie(res, user);
+
+  const { id, firstName, lastName, email, username, token } = currUser;
+
+  res.json({
+    id,
+    firstName,
+    lastName,
+    email,
+    username,
+    token,
+  });
 });
 
 module.exports = router;
