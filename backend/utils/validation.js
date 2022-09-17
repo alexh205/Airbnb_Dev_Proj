@@ -83,6 +83,14 @@ const validateSignup = [
     .exists({ checkFalsy: true })
     .isLength({ min: 6 })
     .withMessage("Password must be 6 characters or more."),
+  check("firstName")
+    .exists({ checkFalsy: true })
+    .isString()
+    .withMessage("First Name is required"),
+  check("lastName")
+    .exists({ checkFalsy: true })
+    .isString()
+    .withMessage("Last Name is required"),
   handleValidationErrors,
 ];
 
@@ -97,7 +105,7 @@ const filterQueryValidator = [
     .withMessage("Size must be greater than or equal to 0"),
   check("maxLat")
     .optional()
-    .isFloat({ min: -400, max: 400})
+    .isFloat({ min: -400, max: 400 })
     .withMessage("Maximum latitude is invalid"),
   check("minLat")
     .optional()
@@ -122,10 +130,23 @@ const filterQueryValidator = [
   handleValidationErrors,
 ];
 
+const reviewValidation = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .isString()
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .isInt({ min: 1, max: 5 })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors,
+];
+
 module.exports = {
   handleValidationErrors,
   validateSpot,
   validateLogin,
   validateSignup,
   filterQueryValidator,
+  reviewValidation,
 };

@@ -3,17 +3,41 @@ const express = require("express");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User } = require("../../db/models");
 
-const { check } = require("express-validator");
-const {
-  handleValidationErrors,
-  validateSignup,
-} = require("../../utils/validation");
+const { validateSignup } = require("../../utils/validation");
 
 const router = express.Router();
 
-// Sign up
+//! Sign up
 router.post("/", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;
+
+  //* Email verification
+  const emailVerification = await User.findOne({ where: { email } });
+
+  if (emailVerification) {
+    return res.status(403).json({
+      message: "User already exists",
+      statusCode: 403,
+      errors: {
+        email: "User with that email already exists",
+      },
+    });
+  }
+
+  //* Username verification
+  const usernameVerification = await User.findOne({ where: { username } });
+
+  if (usernameVerification) {
+    return res.status(403).json({
+      message: "User already exists",
+      statusCode: 403,
+      errors: {
+        email: "User with that username already exists",
+      },
+    });
+  }
+
+  //* Creation of a new user
   const user = await User.signup({
     firstName,
     lastName,
@@ -22,10 +46,13 @@ router.post("/", validateSignup, async (req, res) => {
     username,
   });
 
-  await setTokenCookie(res, user);
-
-  return res.json({
-    user,
+  //* Excluding undesired parameters
+  const newUser = await User.findOne({
+    where: { id: user.id },
+    attributes: { exclude: ["createdAt", "updatedAt", "hashedPassword"] },
   });
+  newUser.dataValues.token = await setTokenCookie(res, user);
+
+  return res.json(newUser);
 });
 module.exports = router;
