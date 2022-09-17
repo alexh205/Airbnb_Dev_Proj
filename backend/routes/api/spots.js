@@ -4,6 +4,7 @@ const express = require("express");
 const {
   validateSpot,
   filterQueryValidator,
+  reviewValidation,
 } = require("../../utils/validation");
 
 // Models
@@ -433,41 +434,48 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
 });
 
 /**********************************************************************************/
-
 //! Create a Review for a Spot based on the Spot's id
 
-router.post("/:spotId/reviews", requireAuth, async (req, res) => {
-  const spot = await Spot.findByPk(req.params.spotId);
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  reviewValidation,
+  async (req, res) => {
+    const spot = await Spot.findByPk(req.params.spotId);
 
-  if (!spot) {
-    return res.status(404).json({
-      message: "Spot couldn't be found",
-      statusCode: 404,
-    });
-  }
-
-  const spotReviews = await Review.findAll({
-    where: { spotId: req.params.spotId },
-  });
-
-  for (let spotReview of spotReviews) {
-    if (spotReview.userId === req.user.id) {
-      return res.status(403).json({
-        message: "User already has a review for this spot",
-        statusCode: 403,
+    if (!spot) {
+      return res.status(404).json({
+        message: "Spot couldn't be found",
+        statusCode: 404,
       });
     }
+
+    const spotReviews = await Review.findAll({
+      where: { spotId: req.params.spotId },
+    });
+
+    for (let spotReview of spotReviews) {
+      if (spotReview.userId === req.user.id) {
+        return res.status(403).json({
+          message: "User already has a review for this spot",
+          statusCode: 403,
+        });
+      }
+    }
+
+    const { review, stars } = req.body;
+    const newReview = await Review.create({
+      userId: req.user.id,
+      spotId: req.params.spotId,
+      review: review,
+      stars: stars,
+    });
+
+    return res.status(201).json(newReview);
   }
+);
 
-  const { review, stars } = req.body;
-  const newReview = await Review.create({
-    userId: req.user.id,
-    spotId: req.params.spotId,
-    review: review,
-    stars: stars,
-  });
-
-  return res.status(201).json(newReview);
-});
+/**********************************************************************************/
+//! Create a Review for a Spot based on the Spot's id
 
 module.exports = router;
