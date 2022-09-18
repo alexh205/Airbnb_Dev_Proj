@@ -317,6 +317,7 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 //! Get all spots for the current user
 
 router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
+  
   const currSpot = await Spot.findAll({
     where: { ownerId: req.user.id },
   });

@@ -2,7 +2,8 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Image extends Model {
-    getImageable(options) { // Grabs the source of the image
+    getImageable(options) {
+      // Grabs the source of the image
       if (!this.imageableType) return Promise.resolve(null);
 
       const imageMix = `get${this.imageableType}`;
@@ -14,17 +15,14 @@ module.exports = (sequelize, DataTypes) => {
       Image.belongsTo(models.User, {
         foreignKey: "imageableId",
         constraints: false,
-
       });
       Image.belongsTo(models.Spot, {
         foreignKey: "imageableId",
         constraints: false,
-
       });
       Image.belongsTo(models.Review, {
         foreignKey: "imageableId",
         constraints: false,
-        
       });
     }
   }
