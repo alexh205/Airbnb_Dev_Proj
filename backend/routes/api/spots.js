@@ -314,38 +314,6 @@ router.delete("/:spotId", requireAuth, async (req, res) => {
 });
 
 /**********************************************************************************/
-//! Get all reviews for a spot
-
-router.get("/:spotId/reviews", async (req, res) => {
-  const currentSpot = await Spot.findByPk(req.params.spotId);
-
-  if (!currentSpot) {
-    return res
-      .status(404)
-      .json({ message: "Spot couldn't be found", statusCode: 404 });
-  }
-
-  //* Reviews
-  const reviews = await Review.findAll({
-    where: { spotId: req.params.spotId },
-    include: [
-      {
-        model: User,
-        attributes: ["id", "firstName", "lastName"],
-      },
-      {
-        model: Image,
-        as: "ReviewImages",
-        where: { imageableType: "Review" },
-        attributes: ["id", "url"],
-      },
-    ],
-  });
-
-  return res.json({ Reviews: reviews });
-});
-
-/**********************************************************************************/
 //! Get all spots for the current user
 
 router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
@@ -476,6 +444,40 @@ router.post(
 );
 
 /**********************************************************************************/
-//! Create a Review for a Spot based on the Spot's id
+//! Get all reviews for a spot
+
+router.get("/:spotId/reviews", async (req, res) => {
+  const currentSpot = await Spot.findByPk(req.params.spotId, {
+    include: [{ model: Review }],
+  });
+  // console.log(currentSpot)
+
+  if (!currentSpot) {
+    return res
+      .status(404)
+      .json({ message: "Spot couldn't be found", statusCode: 404 });
+  }
+
+  //* Reviews
+  const reviews = await Review.findAll({
+    where: { spotId: currentSpot.id },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Image,
+        required: false, // Addresses any null parameters
+        as: "ReviewImages",
+        where: { imageableType: "Review" },
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+  // console.log(reviews);
+
+  return res.json({ Reviews: reviews });
+});
 
 module.exports = router;

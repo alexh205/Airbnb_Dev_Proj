@@ -12,7 +12,10 @@ module.exports = {
           review: "The spot was not to our expectation",
           stars: 1,
         },
-        { userId: 2, spotId: 3, review: "Will stay here again!", stars: 4 },
+        { userId: 2,
+          spotId: 3,
+          review: "Will stay here again!",
+          stars: 4 },
         {
           userId: 2,
           spotId: 2,
