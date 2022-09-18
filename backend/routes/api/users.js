@@ -1,12 +1,17 @@
 const express = require("express");
 
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
+//? Authentication
+const { setTokenCookie } = require("../../utils/auth");
+
+//? Models
 const { User } = require("../../db/models");
 
+//? Validation
 const { validateSignup } = require("../../utils/validation");
 
 const router = express.Router();
 
+/**********************************************************************************/
 //! Sign up
 router.post("/", validateSignup, async (req, res) => {
   const { firstName, lastName, email, password, username } = req.body;

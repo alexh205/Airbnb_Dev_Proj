@@ -632,7 +632,7 @@ Returns all the reviews written by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/reviews/currentUser
+  * URL: /api/reviews/current
   * Body: none
 
 * Successful Response
@@ -990,7 +990,7 @@ Return all the bookings that the current user has made.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/bookings/currentUser
+  * URL: /api/bookings/current
   * Body: none
 
 * Successful Response
@@ -1336,7 +1336,7 @@ Delete an existing image for a Spot.
 * Require proper authorization: Spot must belong to the current user
 * Request
   * Method: DELETE
-  * URL: /api/spots/images/:imageId
+  * URL: /api/images/:imageId
   * Body: none
 
 * Successful Response

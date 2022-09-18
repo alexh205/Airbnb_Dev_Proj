@@ -1,4 +1,4 @@
-const { validationResult, check } = require("express-validator");
+const { validationResult, check, param } = require("express-validator");
 
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
@@ -142,6 +142,17 @@ const reviewValidation = [
   handleValidationErrors,
 ];
 
+const bookingValidation = [
+  check("startDate").exists().notEmpty().withMessage("Must provide start date"),
+  check("endDate").exists().notEmpty().withMessage("Must provide end date"),
+  handleValidationErrors,
+];
+
+const bookingIdValidation = [
+  param("bookingId").isNumeric().withMessage("Booking id must be an integer"),
+  handleValidationErrors,
+];
+
 module.exports = {
   handleValidationErrors,
   validateSpot,
@@ -149,4 +160,6 @@ module.exports = {
   validateSignup,
   filterQueryValidator,
   reviewValidation,
+  bookingValidation,
+  bookingIdValidation,
 };
