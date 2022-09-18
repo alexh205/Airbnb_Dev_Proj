@@ -557,4 +557,9 @@ router.post(
   }
 );
 
+
+/**********************************************************************************/
+//! Create a Booking from a Spot based on the Spot's id
+
+
 module.exports = router;
