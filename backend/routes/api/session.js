@@ -1,16 +1,17 @@
 const express = require("express");
 
-const {
-  setTokenCookie,
-  restoreUser,
-  requireAuth,
-} = require("../../utils/auth");
+//? Authentication
+const { setTokenCookie, restoreUser, requireAuth } = require("../../utils/auth");
+
+//? Models
 const { User } = require("../../db/models");
 
+//? Validation
 const { validateLogin } = require("../../utils/validation");
 
 const router = express.Router();
 
+/**********************************************************************************/
 //! Log in
 router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
@@ -37,11 +38,15 @@ router.post("/", validateLogin, async (req, res, next) => {
   return res.json(loginUser);
 });
 
+/**********************************************************************************/
+
 //! Log out
 router.delete("/", (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
 });
+
+/**********************************************************************************/
 
 // //! Restore session user
 // router.get("/", restoreUser, (req, res) => {
@@ -53,6 +58,7 @@ router.delete("/", (_req, res) => {
 //   } else return res.json({});
 // });
 
+/**********************************************************************************/
 //! Get current User
 router.get("/", restoreUser, requireAuth, async (req, res) => {
   const { user } = req;

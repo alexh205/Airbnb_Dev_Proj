@@ -1,12 +1,12 @@
 const express = require("express");
 
-// Validation
-const { validateSpot, reviewValidation } = require("../../utils/validation");
+//? Validation
+const { reviewValidation } = require("../../utils/validation");
 
-// Models
+//? Models
 const { User, Spot, Review, Image } = require("../../db/models");
 
-// Authentication
+//? Authentication
 const { requireAuth } = require("../../utils/auth");
 
 const router = express.Router();
@@ -74,7 +74,7 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 
 /**********************************************************************************/
 //! Get all Reviews of the Current User
-
+/*
 router.get("/current", requireAuth, async (req, res) => {
   const currUserReviews = await Review.findAll({
     where: { userId: req.user.id },
@@ -101,7 +101,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
   res.json({ Reviews: currUserReviews });
 });
-
+*/
 /**********************************************************************************/
 //! Add an Image to a Review based on the Review's id
 
