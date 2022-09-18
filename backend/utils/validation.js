@@ -142,6 +142,12 @@ const reviewValidation = [
   handleValidationErrors,
 ];
 
+const bookingValidation = [
+  check("startDate").exists().notEmpty().withMessage("Must provide start date"),
+  check("endDate").exists().notEmpty().withMessage("Must provide end date"),
+  handleValidationErrors,
+];
+
 module.exports = {
   handleValidationErrors,
   validateSpot,
@@ -149,4 +155,5 @@ module.exports = {
   validateSignup,
   filterQueryValidator,
   reviewValidation,
+  bookingValidation,
 };
