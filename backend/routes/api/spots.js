@@ -477,7 +477,7 @@ router.get("/:spotId/reviews", async (req, res) => {
       },
       {
         model: Image,
-        required: false, 
+        required: false,
         as: "ReviewImages",
         where: { imageableType: "Review" },
         attributes: ["id", "url"],
@@ -601,6 +601,13 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
           },
         },
       ],
+    });
+  }
+
+  if (!spotBookings.length) {
+    return res.status(404).json({
+      message: "No bookings can be found for the current spot",
+      statusCode: 404,
     });
   }
 
