@@ -47,6 +47,27 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
+  for (let booking of userBookings) {
+    let spotId = booking.dataValues.Spot.dataValues.id;
+
+    console.log(spotId);
+
+    //* Images
+    let previewImage = [];
+
+    let spotPhoto = await Image.findAll({
+      where: [{ imageableId: spotId }, { imageableType: "Spot" }],
+    });
+
+    for (let photo of spotPhoto) {
+      previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (booking.dataValues.Spot.dataValues.previewImage = previewImage[0])
+      : (booking.dataValues.Spot.dataValues.previewImage = null);
+  }
+
   if (!userBookings.length) {
     return res.status(404).json({
       message: "No bookings can be found for the current user",
@@ -54,25 +75,6 @@ router.get("/current", requireAuth, async (req, res) => {
     });
   }
 
-  // for (let booking of userBookings) {
-  //   // console.log(booking.dataValues.Spot.id);
-
-  //   //* Images
-  //   let previewImage = [];
-
-  //   const spotPhoto = await Image.findAll({
-  //     where: booking.dataValues.Spot.id,
-  //   });
-  //       console.log(spotPhoto)
-  //   for (let photo of spotPhoto) {
-  //     if (photo.imageableId === booking.dataValues.Spot.id)
-  //       previewImage.push(photo.url);
-  //   }
-
-  //   previewImage.length > 0
-  //     ? (booking.dataValues.Spot.previewImage = previewImage[0])
-  //     : (booking.dataValues.Spot.previewImage = null);
-  // }
   return res.json({ Bookings: userBookings });
 });
 

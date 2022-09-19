@@ -4,7 +4,7 @@ const express = require("express");
 const { requireAuth } = require("../../utils/auth");
 
 //? Models
-const { User, Image, Spot, Review } = require("../../db/models");
+const { Image } = require("../../db/models");
 
 const router = express.Router();
 
