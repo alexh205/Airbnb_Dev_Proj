@@ -322,12 +322,19 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
     where: { ownerId: req.user.id },
   });
 
+  if (!currSpot.length) {
+    return res.status(404).json({
+      message: "No spots can be found for the current user",
+      statusCode: 404,
+    });
+  }
+
   for (let spot of currSpot) {
-    const { id } = currSpot;
+    const { id } = spot;
     //* Ratings
     const starRating = await Review.findAll({
       where: {
-        spotId: spot.id,
+        spotId: id,
       },
     });
 
@@ -349,11 +356,12 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
     //* Images
     let previewImage = [];
 
-    const spotPhoto = await spot.getSpotImages({ raw: true });
+    const spotPhoto = await spot.getSpotImages();
 
     for (let photo of spotPhoto) {
       if (photo.imageableId === id) previewImage.push(photo.url);
     }
+
     previewImage.length > 0
       ? (spot.dataValues.previewImage = previewImage[0])
       : (spot.dataValues.previewImage = null);
@@ -363,7 +371,7 @@ router.get("/profile/current", restoreUser, requireAuth, async (req, res) => {
 });
 
 /**********************************************************************************/
-//! Add an Image based on a spotId
+//! Create an Image for a spotId
 
 router.post("/:spotId/images", requireAuth, async (req, res) => {
   const currentSpot = await Spot.findOne({
@@ -557,9 +565,46 @@ router.post(
   }
 );
 
-
 /**********************************************************************************/
-//! Create a Booking from a Spot based on the Spot's id
+//! Get all Bookings for a Spot based on the Spot's id
+router.get("/:spotId/bookings", requireAuth, async (req, res) => {
+  const spot = await Spot.findByPk(req.params.spotId);
+
+  if (!spot) {
+    return res
+      .status(404)
+      .json({ message: "Spot couldn't be found", statusCode: 404 });
+  }
+
+  let spotBookings;
+
+  if (spot.ownerId !== req.user.id) {
+    spotBookings = await Booking.findAll({
+      where: { spotId: req.params.spotId },
+      attributes: ["spotId", "startDate", "endDate"],
+    });
+  } else {
+    spotBookings = await Booking.findAll({
+      where: { spotId: req.params.spotId },
+      include: [
+        {
+          model: User,
+          attributes: {
+            exclude: [
+              "username",
+              "email",
+              "hashedPassword",
+              "createdAt",
+              "updatedAt",
+            ],
+          },
+        },
+      ],
+    });
+  }
+
+  return res.json({ Bookings: spotBookings });
+});
 
 
 module.exports = router;

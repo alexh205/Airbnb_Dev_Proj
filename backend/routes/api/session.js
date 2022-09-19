@@ -1,7 +1,11 @@
 const express = require("express");
 
 //? Authentication
-const { setTokenCookie, restoreUser, requireAuth } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  restoreUser,
+  requireAuth,
+} = require("../../utils/auth");
 
 //? Models
 const { User } = require("../../db/models");
@@ -34,8 +38,9 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 
   loginUser.dataValues.token = await setTokenCookie(res, user);
+  const { firstName, lastName, username, email } = loginUser;
 
-  return res.json(loginUser);
+  return res.json({ firstName, lastName, username, email, token: "" });
 });
 
 /**********************************************************************************/
@@ -71,7 +76,7 @@ router.get("/", restoreUser, requireAuth, async (req, res) => {
 
   currUser.token = await setTokenCookie(res, user);
 
-  const { id, firstName, lastName, email, username, token } = currUser;
+  const { id, firstName, lastName, email, username } = currUser;
 
   res.json({
     id,
@@ -79,7 +84,7 @@ router.get("/", restoreUser, requireAuth, async (req, res) => {
     lastName,
     email,
     username,
-    token,
+    token: "",
   });
 });
 
