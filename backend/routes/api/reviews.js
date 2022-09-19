@@ -74,7 +74,7 @@ router.delete("/:reviewId", requireAuth, async (req, res) => {
 
 /**********************************************************************************/
 //! Get all Reviews of the Current User
-/*
+
 router.get("/current", requireAuth, async (req, res) => {
   const currUserReviews = await Review.findAll({
     where: { userId: req.user.id },
@@ -99,9 +99,35 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
-  res.json({ Reviews: currUserReviews });
+  for (let review of currUserReviews) {
+    let spotId = review.dataValues.Spot.dataValues.id;
+
+    //* Images
+    let previewImage = [];
+
+    let spotPhoto = await Image.findAll({
+      where: [{ imageableId: spotId }, { imageableType: "Spot" }],
+    });
+
+    for (let photo of spotPhoto) {
+      previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (review.dataValues.Spot.dataValues.previewImage = previewImage[0])
+      : (review.dataValues.Spot.dataValues.previewImage = null);
+  }
+
+  if (!currUserReviews.length) {
+    return res.status(404).json({
+      message: "No reviews can be found for the current user",
+      statusCode: 404,
+    });
+  }
+
+  return res.json({ Reviews: currUserReviews });
 });
-*/
+
 /**********************************************************************************/
 //! Add an Image to a Review based on the Review's id
 
@@ -139,6 +165,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     imageableId: currentReview.id,
     imageableType: "Review",
     url: req.body.url,
+    userId: req.user.id,
   });
 
   const { id, url } = newImage;

@@ -18,29 +18,64 @@ const router = express.Router();
 router.get("/current", requireAuth, async (req, res) => {
   const userBookings = await Booking.findAll({
     where: { userId: req.user.id },
+    attributes: [
+      "id",
+      "spotId",
+      "userId",
+      "startDate",
+      "endDate",
+      "createdAt",
+      "updatedAt",
+    ],
     include: [
       {
         model: Spot,
         required: false,
-        attributes: {
-          include: [
-            "id",
-            "ownerId",
-            "address",
-            "city",
-            "state",
-            "country",
-            "lat",
-            "lng",
-            "name",
-            "price",
-          ],
-        },
+        attributes: [
+          "id",
+          "ownerId",
+          "address",
+          "city",
+          "state",
+          "country",
+          "lat",
+          "lng",
+          "name",
+          "price",
+        ],
       },
     ],
   });
 
-  return res.json(userBookings);
+  for (let booking of userBookings) {
+    let spotId = booking.dataValues.Spot.dataValues.id;
+
+    console.log(spotId);
+
+    //* Images
+    let previewImage = [];
+
+    let spotPhoto = await Image.findAll({
+      where: [{ imageableId: spotId }, { imageableType: "Spot" }],
+    });
+
+    for (let photo of spotPhoto) {
+      previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (booking.dataValues.Spot.dataValues.previewImage = previewImage[0])
+      : (booking.dataValues.Spot.dataValues.previewImage = null);
+  }
+
+  if (!userBookings.length) {
+    return res.status(404).json({
+      message: "No bookings can be found for the current user",
+      statusCode: 404,
+    });
+  }
+
+  return res.json({ Bookings: userBookings });
 });
 
 /**********************************************************************************/
