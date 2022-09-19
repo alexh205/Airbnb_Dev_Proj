@@ -120,7 +120,7 @@ router.get("/current", requireAuth, async (req, res) => {
 
   if (!currUserReviews.length) {
     return res.status(404).json({
-      message: "No reviews can be found for the current user",
+      message: "No reviews could be found for the current user",
       statusCode: 404,
     });
   }
