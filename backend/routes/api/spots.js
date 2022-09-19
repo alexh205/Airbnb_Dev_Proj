@@ -479,6 +479,56 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
 });
 
 /**********************************************************************************/
+//! Get all spots
+
+router.get("/", async (req, res) => {
+  const spots = await Spot.findAll();
+
+  for (let spot of spots) {
+    const { id } = spot;
+
+    //* Ratings
+    const starRating = await Review.findAll({
+      where: {
+        spotId: id,
+      },
+    });
+
+    const numReviews = starRating.length;
+    let ratingTotal = 0;
+
+    starRating.forEach((review) => {
+      if (review.stars) ratingTotal += review.stars;
+    });
+
+    let avgRating;
+
+    ratingTotal > 0
+      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
+      : (avgRating = 0);
+
+    spot.dataValues.avgRating = avgRating;
+
+    //* Images
+    const previewImage = [];
+
+    const spotPhoto = await spot.getSpotImages({ raw: true });
+
+    for (let photo of spotPhoto) {
+      if (photo.imageableId === id) previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (spot.dataValues.previewImage = previewImage[0])
+      : (spot.dataValues.previewImage = null);
+  }
+
+  return res.json({
+    Spots: spots,
+  });
+});
+
+/**********************************************************************************/
 //! Get all spots by query filters
 
 router.get("/", filterQueryValidator, async (req, res) => {
@@ -563,108 +613,11 @@ router.get("/", filterQueryValidator, async (req, res) => {
       ? (spot.dataValues.previewImage = previewImage[0])
       : (spot.dataValues.previewImage = null);
   }
-
-  //! return all spots
-
-  const emptySpots = await Spot.findAll();
-
-  for (let emptySpot of emptySpots) {
-    const { id } = emptySpot;
-
-    //* Ratings
-    const starRating = await Review.findAll({
-      where: {
-        spotId: id,
-      },
-    });
-
-    const numReviews = starRating.length;
-    let ratingTotal = 0;
-
-    starRating.forEach((review) => {
-      if (review.stars) ratingTotal += review.stars;
-    });
-
-    let avgRating;
-
-    ratingTotal > 0
-      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
-      : (avgRating = 0);
-
-    emptySpot.dataValues.avgRating = avgRating;
-
-    //* Images
-    const previewImage = [];
-
-    const spotPhoto = await emptySpot.getSpotImages({ raw: true });
-
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
-
-    previewImage.length > 0
-      ? (emptySpot.dataValues.previewImage = previewImage[0])
-      : (emptySpot.dataValues.previewImage = null);
-  }
-
-  if (!req.query.page && !req.query.size) {
-    return res.json({ Spots: emptySpots });
-  } else {
-    return res.json({
-      spots,
-      page: page,
-      size: size,
-    });
-  }
+  return res.json({
+    spots,
+    page: page,
+    size: size,
+  });
 });
 
-/**********************************************************************************/
-// //! Get all spots
-
-// router.get("/", async (req, res) => {
-//   const spots = await Spot.findAll();
-
-//   for (let spot of spots) {
-//     const { id } = spot;
-
-//     //* Ratings
-//     const starRating = await Review.findAll({
-//       where: {
-//         spotId: id,
-//       },
-//     });
-
-//     const numReviews = starRating.length;
-//     let ratingTotal = 0;
-
-//     starRating.forEach((review) => {
-//       if (review.stars) ratingTotal += review.stars;
-//     });
-
-//     let avgRating;
-
-//     ratingTotal > 0
-//       ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
-//       : (avgRating = 0);
-
-//     spot.dataValues.avgRating = avgRating;
-
-//     //* Images
-//     const previewImage = [];
-
-//     const spotPhoto = await spot.getSpotImages({ raw: true });
-
-//     for (let photo of spotPhoto) {
-//       if (photo.imageableId === id) previewImage.push(photo.url);
-//     }
-
-//     previewImage.length > 0
-//       ? (spot.dataValues.previewImage = previewImage[0])
-//       : (spot.dataValues.previewImage = null);
-//   }
-
-//   return res.json({
-//     Spots: spots,
-//   });
-// });
 module.exports = router;
