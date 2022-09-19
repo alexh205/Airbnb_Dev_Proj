@@ -48,9 +48,9 @@ app.use(
 
 app.use(routes);
 
-app.get("/", (req, res) => {
-  res.json("this is not working!");
-});
+// app.get("/", (req, res) => {
+//   res.json("this is not working!");
+// });
 
 // Catch unhandled requests and forward to error handler.
 app.use((_req, _res, next) => {
