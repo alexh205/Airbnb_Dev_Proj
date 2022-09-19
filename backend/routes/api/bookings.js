@@ -8,7 +8,7 @@ const { bookingIdValidation } = require("../../utils/validation");
 //? Models
 const { User, Image, Spot, Booking } = require("../../db/models");
 
-const { Op } = require("Sequelize");
+const { Op } = require("sequelize");
 
 const router = express.Router();
 
