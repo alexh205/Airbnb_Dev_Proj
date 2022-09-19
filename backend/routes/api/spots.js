@@ -396,6 +396,7 @@ router.post("/:spotId/images", requireAuth, async (req, res) => {
     imageableId: currentSpot.id,
     imageableType: "Spot",
     url: req.body.url,
+    userId: req.user.id,
   });
 
   if (req.body.previewImage === true && req.body.previewImage) {
@@ -476,7 +477,7 @@ router.get("/:spotId/reviews", async (req, res) => {
       },
       {
         model: Image,
-        required: false, // Addresses any null parameters
+        required: false, 
         as: "ReviewImages",
         where: { imageableType: "Review" },
         attributes: ["id", "url"],
@@ -503,9 +504,9 @@ router.post(
         .json({ message: "Spot couldn't be found", statusCode: 404 });
     }
 
-    if (bookingSpot.ownerId !== req.user.id) {
+    if (bookingSpot.ownerId === req.user.id) {
       return res.status(403).json({
-        message: "Unauthorized",
+        message: "Unauthorized - you can't book your own property",
         statusCode: 403,
       });
     }
@@ -605,6 +606,5 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
 
   return res.json({ Bookings: spotBookings });
 });
-
 
 module.exports = router;

@@ -31,6 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       imageableId: DataTypes.INTEGER,
       imageableType: { type: DataTypes.ENUM("User", "Spot", "Review") },
       url: DataTypes.STRING,
+      userId: { type: DataTypes.INTEGER, allowNull: false },
     },
     {
       sequelize,
