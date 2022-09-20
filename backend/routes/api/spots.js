@@ -493,14 +493,14 @@ router.get("/", filterQueryValidator, async (req, res) => {
 
   //* Page filters
   let page = req.query.page;
-  !page ? (page = 0) : (page = page);
+  !page ? (page = 0) : (page = parseInt(req.query.page));
 
   //* Size filters
   let size = req.query.size;
-  !size ? (size = 20) : (size = size);
+  !size ? (size = 20) : (size = parseInt(req.query.size));
 
   //* Limit & Offset parameters
-  if (page >= 0 && size >= 0) {
+  if (page > 0 && size > 0) {
     query.limit = size;
     query.offset = size * (page - 1);
   }
@@ -554,9 +554,9 @@ router.get("/", filterQueryValidator, async (req, res) => {
   }
 
   //* Query for all the spots
-  const spots = await Spot.findAll(query);
+  const Spots = await Spot.findAll(query);
 
-  for (let spot of spots) {
+  for (let spot of Spots) {
     const { id } = spot;
 
     //* previewImages
@@ -574,7 +574,7 @@ router.get("/", filterQueryValidator, async (req, res) => {
   }
 
   return res.json({
-    spots,
+    Spots,
     page: page,
     size: size,
   });
@@ -583,51 +583,51 @@ router.get("/", filterQueryValidator, async (req, res) => {
 /**********************************************************************************/
 //! Get all spots
 
-router.get("/", async (req, res) => {
-  const spots = await Spot.findAll();
+// router.get("/", async (req, res) => {
+//   const spots = await Spot.findAll();
 
-  for (let spot of spots) {
-    const { id } = spot;
+//   for (let spot of spots) {
+//     const { id } = spot;
 
-    //* Ratings
-    const starRating = await Review.findAll({
-      where: {
-        spotId: id,
-      },
-    });
+//     //* Ratings
+//     const starRating = await Review.findAll({
+//       where: {
+//         spotId: id,
+//       },
+//     });
 
-    const numReviews = starRating.length;
-    let ratingTotal = 0;
+//     const numReviews = starRating.length;
+//     let ratingTotal = 0;
 
-    starRating.forEach((review) => {
-      if (review.stars) ratingTotal += review.stars;
-    });
+//     starRating.forEach((review) => {
+//       if (review.stars) ratingTotal += review.stars;
+//     });
 
-    let avgRating;
+//     let avgRating;
 
-    ratingTotal > 0
-      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
-      : (avgRating = 0);
+//     ratingTotal > 0
+//       ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
+//       : (avgRating = 0);
 
-    spot.dataValues.avgRating = avgRating;
+//     spot.dataValues.avgRating = avgRating;
 
-    //* Images
-    const previewImage = [];
+//     //* Images
+//     const previewImage = [];
 
-    const spotPhoto = await spot.getSpotImages({ raw: true });
+//     const spotPhoto = await spot.getSpotImages({ raw: true });
 
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
+//     for (let photo of spotPhoto) {
+//       if (photo.imageableId === id) previewImage.push(photo.url);
+//     }
 
-    previewImage.length > 0
-      ? (spot.dataValues.previewImage = previewImage[0])
-      : (spot.dataValues.previewImage = null);
-  }
+//     previewImage.length > 0
+//       ? (spot.dataValues.previewImage = previewImage[0])
+//       : (spot.dataValues.previewImage = null);
+//   }
 
-  return res.json({
-    Spots: spots,
-  });
-});
+//   return res.json({
+//     Spots: spots,
+//   });
+// });
 
 module.exports = router;
