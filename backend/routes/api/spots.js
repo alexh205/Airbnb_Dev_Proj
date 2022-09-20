@@ -355,158 +355,9 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
 });
 
 /**********************************************************************************/
-//! Get all spots by query filters
+//! Get spot by a spot id
 
-router.get("/search", filterQueryValidator, async (req, res) => {
-  const { maxLat, minLat, minLng, maxLng, minPrice, maxPrice } = req.query;
-
-  const query = {
-    where: {},
-  };
-
-  //* Page filters
-  let page = req.query.page;
-  !page ? (page = 0) : (page = page);
-
-  //* Size filters
-  let size = req.query.size;
-  !size ? (size = 20) : (size = size);
-
-  //* Limit & Offset parameters
-  if (page >= 0 && size >= 0) {
-    query.limit = size;
-    query.offset = size * (page - 1);
-  }
-
-  //* Latitude filters
-  if (minLat && maxLat) {
-    query.where.lat = { [Op.lt]: req.query.maxLat, [Op.gt]: req.query.minLat };
-  } else if (minLat && !maxLat) {
-    query.where.lat = {
-      [Op.gt]: req.query.minLat,
-    };
-  } else if (!minLat && maxLat) {
-    query.where.lat = {
-      [Op.lt]: req.query.maxLat,
-    };
-  }
-
-  //* Longitude filters
-  if (minLng && maxLng) {
-    query.where.lng = { [Op.lt]: req.query.maxLng, [Op.gt]: req.query.minLng };
-  } else if (minLng && !maxLng) {
-    query.where.lng = {
-      [Op.gt]: req.query.minLng,
-    };
-  } else if (!minLng && maxLng) {
-    query.where.lng = {
-      [Op.lt]: req.query.maxLng,
-    };
-  }
-
-  //* Price filters
-  if (minPrice && maxPrice) {
-    query.where.price = {
-      [Op.lt]: req.query.maxPrice,
-      [Op.gt]: req.query.minPrice,
-    };
-  } else if (minPrice && !maxPrice) {
-    query.where.price = {
-      [Op.gt]: req.query.minPrice,
-    };
-  } else if (!minPrice && maxPrice) {
-    query.where.price = {
-      [Op.lt]: req.query.maxPrice,
-    };
-  }
-
-  //* Query for all the spots
-  const spots = await Spot.findAll(query);
-
-  for (let spot of spots) {
-    const { id } = spot;
-
-    //* previewImages
-    const previewImage = [];
-
-    const spotPhoto = await spot.getSpotImages({ raw: true });
-
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
-
-    previewImage.length > 0
-      ? (spot.dataValues.previewImage = previewImage[0])
-      : (spot.dataValues.previewImage = null);
-  }
-
-  return res.json({
-    spots,
-    page: page,
-    size: size,
-  });
-});
-
-/**********************************************************************************/
-//! Get all spots for the current user
-
-router.get("/current", restoreUser, requireAuth, async (req, res) => {
-  const currSpot = await Spot.findAll({
-    where: { ownerId: req.user.id },
-  });
-
-  if (!currSpot.length) {
-    return res.status(404).json({
-      message: "No spots can be found for the current user",
-      statusCode: 404,
-    });
-  }
-
-  for (let spot of currSpot) {
-    const { id } = spot;
-    //* Ratings
-    const starRating = await Review.findAll({
-      where: {
-        spotId: id,
-      },
-    });
-
-    const numReviews = starRating.length;
-    let ratingTotal = 0;
-
-    starRating.forEach((review) => {
-      if (review.stars) ratingTotal += review.stars;
-    });
-
-    let avgRating;
-
-    ratingTotal > 0
-      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
-      : (avgRating = 0);
-
-    spot.dataValues.avgRating = avgRating;
-
-    //* Images
-    let previewImage = [];
-
-    const spotPhoto = await spot.getSpotImages();
-
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
-
-    previewImage.length > 0
-      ? (spot.dataValues.previewImage = previewImage[0])
-      : (spot.dataValues.previewImage = null);
-  }
-
-  return res.json(currSpot);
-});
-
-/**********************************************************************************/
-//! Get spot by spot id
-
-router.get("/:spotId", async (req, res) => {
+router.get("/:spotId(\\d+)/", async (req, res, next) => {
   const currentSpot = await Spot.findOne({
     where: { id: req.params.spotId },
   });
@@ -568,8 +419,165 @@ router.get("/:spotId", async (req, res) => {
   });
 
   currentSpot.dataValues.Owner = spotOwner;
+  if (currentSpot) {
+    return res.json(currentSpot);
+  }
+  next();
+});
 
-  return res.json(currentSpot);
+/**********************************************************************************/
+//! Get all spots for the current user
+
+router.get("/current", restoreUser, requireAuth, async (req, res) => {
+  const currSpot = await Spot.findAll({
+    where: { ownerId: req.user.id },
+  });
+
+  if (!currSpot.length) {
+    return res.status(404).json({
+      message: "No spots can be found for the current user",
+      statusCode: 404,
+    });
+  }
+
+  for (let spot of currSpot) {
+    const { id } = spot;
+    //* Ratings
+    const starRating = await Review.findAll({
+      where: {
+        spotId: id,
+      },
+    });
+
+    const numReviews = starRating.length;
+    let ratingTotal = 0;
+
+    starRating.forEach((review) => {
+      if (review.stars) ratingTotal += review.stars;
+    });
+
+    let avgRating;
+
+    ratingTotal > 0
+      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
+      : (avgRating = 0);
+
+    spot.dataValues.avgRating = avgRating;
+
+    //* Images
+    let previewImage = [];
+
+    const spotPhoto = await spot.getSpotImages();
+
+    for (let photo of spotPhoto) {
+      if (photo.imageableId === id) previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (spot.dataValues.previewImage = previewImage[0])
+      : (spot.dataValues.previewImage = null);
+  }
+
+  return res.json(currSpot);
+});
+
+/**********************************************************************************/
+//! Get all spots by query filters
+
+router.get("/", filterQueryValidator, async (req, res) => {
+  const { maxLat, minLat, minLng, maxLng, minPrice, maxPrice } = req.query;
+
+  const query = {
+    where: {},
+  };
+
+  //* Page filters
+  let page = req.query.page;
+  !page ? (page = 0) : (page = page);
+
+  //* Size filters
+  let size = req.query.size;
+  !size ? (size = 20) : (size = size);
+
+  //* Limit & Offset parameters
+  if (page >= 0 && size >= 0) {
+    query.limit = size;
+    query.offset = size * (page - 1);
+  }
+
+  //* Latitude filters
+  if (minLat && maxLat) {
+    query.where.lat = {
+      [Op.lt]: req.query.maxLat,
+      [Op.gt]: req.query.minLat,
+    };
+  } else if (minLat && !maxLat) {
+    query.where.lat = {
+      [Op.gt]: req.query.minLat,
+    };
+  } else if (!minLat && maxLat) {
+    query.where.lat = {
+      [Op.lt]: req.query.maxLat,
+    };
+  }
+
+  //* Longitude filters
+  if (minLng && maxLng) {
+    query.where.lng = {
+      [Op.lt]: req.query.maxLng,
+      [Op.gt]: req.query.minLng,
+    };
+  } else if (minLng && !maxLng) {
+    query.where.lng = {
+      [Op.gt]: req.query.minLng,
+    };
+  } else if (!minLng && maxLng) {
+    query.where.lng = {
+      [Op.lt]: req.query.maxLng,
+    };
+  }
+
+  //* Price filters
+  if (minPrice && maxPrice) {
+    query.where.price = {
+      [Op.lt]: req.query.maxPrice,
+      [Op.gt]: req.query.minPrice,
+    };
+  } else if (minPrice && !maxPrice) {
+    query.where.price = {
+      [Op.gt]: req.query.minPrice,
+    };
+  } else if (!minPrice && maxPrice) {
+    query.where.price = {
+      [Op.lt]: req.query.maxPrice,
+    };
+  }
+
+  //* Query for all the spots
+  const spots = await Spot.findAll(query);
+
+  for (let spot of spots) {
+    const { id } = spot;
+
+    //* previewImages
+    const previewImage = [];
+
+    const spotPhoto = await spot.getSpotImages({ raw: true });
+
+    for (let photo of spotPhoto) {
+      if (photo.imageableId === id) previewImage.push(photo.url);
+    }
+
+    previewImage.length > 0
+      ? (spot.dataValues.previewImage = previewImage[0])
+      : (spot.dataValues.previewImage = null);
+  }
+
+  return res.json({
+    spots,
+    page: page,
+    size: size,
+  });
 });
 
 /**********************************************************************************/
