@@ -278,7 +278,7 @@ Returns all the spots owned (created) by the current user.
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/spots/profile/current
+  * URL: /api/spots/current
   * Body: none
 
 * Successful Response
@@ -1409,7 +1409,7 @@ Return spots filtered by query parameters.
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /spots/filters
+  * URL: /spots/search
   * Query Parameters
     * page: integer, minimum: 0, maximum: 10, default: 0
     * size: integer, minimum: 0, maximum: 20, default: 20
