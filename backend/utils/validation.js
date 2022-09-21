@@ -1,4 +1,4 @@
-const { validationResult, check, param } = require("express-validator");
+const { validationResult, check, param, query } = require("express-validator");
 
 // middleware for formatting errors from express-validator middleware
 // (to customize, see express-validator's documentation)
@@ -95,35 +95,35 @@ const validateSignup = [
 ];
 
 const filterQueryValidator = [
-  check("page")
+  query("page")
     .optional()
     .isInt({ min: 0, max: 10 })
     .withMessage("Page must be greater than or equal to 0"),
-  check("size")
+  query("size")
     .optional()
     .isInt({ min: 0, max: 20 })
     .withMessage("Size must be greater than or equal to 0"),
-  check("maxLat")
+  query("maxLat")
     .optional()
     .isFloat({ min: -400, max: 400 })
     .withMessage("Maximum latitude is invalid"),
-  check("minLat")
+  query("minLat")
     .optional()
     .isFloat({ min: -400, max: 400 })
     .withMessage("Minimum latitude is invalid"),
-  check("minLng")
+  query("minLng")
     .optional()
     .isFloat({ min: -400, max: 400 })
     .withMessage("Minimum longitude is invalid"),
-  check("maxLng")
+  query("maxLng")
     .optional()
     .isFloat({ min: -400, max: 400 })
     .withMessage("Maximum longitude is invalid"),
-  check("minPrice")
+  query("minPrice")
     .optional()
     .isFloat({ min: 0 })
     .withMessage("Minimum price must be greater than or equal to 0"),
-  check("maxPrice")
+  query("maxPrice")
     .optional()
     .isFloat({ min: 1 })
     .withMessage("Maximum price must be greater than or equal to 0"),
@@ -148,6 +148,11 @@ const bookingValidation = [
   handleValidationErrors,
 ];
 
+const spotIdValidation = [
+  param("spotId").isNumeric().withMessage("Spot id must be an integer"),
+  handleValidationErrors,
+];
+
 const bookingIdValidation = [
   param("bookingId").isNumeric().withMessage("Booking id must be an integer"),
   handleValidationErrors,
@@ -161,5 +166,6 @@ module.exports = {
   filterQueryValidator,
   reviewValidation,
   bookingValidation,
+  spotIdValidation,
   bookingIdValidation,
 };
