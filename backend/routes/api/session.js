@@ -84,7 +84,6 @@ router.get("/", restoreUser, requireAuth, async (req, res) => {
     lastName,
     email,
     username,
-    token: "",
   });
 });
 
