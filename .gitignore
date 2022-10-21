@@ -3,5 +3,6 @@ node_modules
 .env
 build
 *.db
-authenticate-me
+authenticate-me (backend)
+authenticate-me (frontend)
 notes.md
