@@ -47,8 +47,8 @@ router.post("/", validateSignup, async (req, res) => {
     firstName,
     lastName,
     email,
-    password,
     username,
+    password,
   });
 
   //* Excluding undesired parameters

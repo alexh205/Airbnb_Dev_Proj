@@ -47,7 +47,7 @@ function SignupFormPage() {
         ))}
       </ul>
       <label>
-        Email
+        First Name
         <input
           type="text"
           value={firstName}
@@ -56,7 +56,7 @@ function SignupFormPage() {
         />
       </label>
       <label>
-        Email
+        Last Name
         <input
           type="text"
           value={lastName}
@@ -106,4 +106,3 @@ function SignupFormPage() {
 }
 
 export default SignupFormPage;
-

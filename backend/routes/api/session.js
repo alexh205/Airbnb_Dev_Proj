@@ -40,7 +40,7 @@ router.post("/", validateLogin, async (req, res, next) => {
   loginUser.dataValues.token = await setTokenCookie(res, user);
   const { firstName, lastName, username, email } = loginUser;
 
-  return res.json({ firstName, lastName, username, email, token: "" });
+  return res.json({ firstName, lastName, username, email });
 });
 
 /**********************************************************************************/
@@ -53,38 +53,38 @@ router.delete("/", (_req, res) => {
 
 /**********************************************************************************/
 
-// //! Restore session user
-// router.get("/", restoreUser, (req, res) => {
-//   const { user } = req;
-//   if (user) {
-//     return res.json({
-//       user: user.toSafeObject(),
-//     });
-//   } else return res.json({});
-// });
-
-/**********************************************************************************/
-//! Get current User
-router.get("/", restoreUser, requireAuth, async (req, res) => {
+//! Restore session user
+router.get("/", restoreUser, (req, res) => {
   const { user } = req;
-
-  //* Excluding undesired parameters
-  const currUser = await User.findOne({
-    where: { id: user.id },
-    attributes: { exclude: ["createdAt", "updatedAt"] },
-  });
-
-  currUser.token = await setTokenCookie(res, user);
-
-  const { id, firstName, lastName, email, username } = currUser;
-
-  res.json({
-    id,
-    firstName,
-    lastName,
-    email,
-    username,
-  });
+  if (user) {
+    return res.json({
+      user: user.toSafeObject(),
+    });
+  } else return res.json({});
 });
+
+// /**********************************************************************************/
+// //! Get current User
+// router.get("/", restoreUser, requireAuth, async (req, res) => {
+//   const { user } = req;
+
+//   //* Excluding undesired parameters
+//   const currUser = await User.findOne({
+//     where: { id: user.id },
+//     attributes: { exclude: ["createdAt", "updatedAt"] },
+//   });
+
+//   currUser.token = await setTokenCookie(res, user);
+
+//   const { id, firstName, lastName, email, username } = currUser;
+
+//   res.json({
+//     id,
+//     firstName,
+//     lastName,
+//     email,
+//     username,
+//   });
+// });
 
 module.exports = router;
