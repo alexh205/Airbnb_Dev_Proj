@@ -585,8 +585,6 @@ router.get("/:spotId/bookings", requireAuth, async (req, res) => {
   return res.json({ Bookings: spotBookings });
 });
 
-
-
 /**********************************************************************************/
 //! Get all spots
 

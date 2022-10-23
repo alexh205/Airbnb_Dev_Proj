@@ -57,7 +57,6 @@ function SignupFormPage() {
               required
             />
           </label>
-
           <label>
             Last Name
             <input
@@ -68,7 +67,6 @@ function SignupFormPage() {
               required
             />
           </label>
-
           <label>
             Email
             <input
@@ -79,7 +77,6 @@ function SignupFormPage() {
               required
             />
           </label>
-
           <label>
             Username
             <input
@@ -90,7 +87,6 @@ function SignupFormPage() {
               required
             />
           </label>
-
           <label>
             Password
             <input
@@ -101,7 +97,6 @@ function SignupFormPage() {
               required
             />
           </label>
-
           <label>
             Confirm Password
             <input

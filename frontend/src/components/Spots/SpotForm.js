@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import * as sessionActions from "../../store/session";
 import { addNewSpot } from "../../store/spots";
 
 const SpotForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const sessionUser = useSelector((state) => state.session.user);
+
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
@@ -21,25 +20,24 @@ const SpotForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let spot = {
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    };
 
-    if (sessionUser) {
+    try {
+      await dispatch(addNewSpot(spot));
+    } catch (res) {
       setErrors([]);
-      return dispatch(
-        sessionActions.addNewSpot({
-          address,
-          city,
-          state,
-          country,
-          lat,
-          lng,
-          name,
-          description,
-          price,
-        })
-      ).catch(async (res) => {
-        const data = await res.json();
-        if (data && data.errors) setErrors(data.errors);
-      });
+      const data = await res.json();
+      if (data && data.message) setErrors(data.errors);
     }
   };
 
@@ -47,6 +45,7 @@ const SpotForm = () => {
     <div>
       <form className="spots-app" onSubmit={handleSubmit}>
         <div>
+          <h2>Create a New Spot</h2>
           <label>
             Name
             <input
@@ -54,6 +53,7 @@ const SpotForm = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              placeholder="Name"
             />
           </label>
           <label>
@@ -63,6 +63,7 @@ const SpotForm = () => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               required
+              placeholder="Address"
             />
           </label>
           <label>
@@ -72,6 +73,7 @@ const SpotForm = () => {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               required
+              placeholder="City"
             />
           </label>
           <label>
@@ -81,6 +83,7 @@ const SpotForm = () => {
               value={state}
               onChange={(e) => setState(e.target.value)}
               required
+              placeholder="State"
             />
           </label>
           <label>
@@ -90,6 +93,7 @@ const SpotForm = () => {
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               required
+              placeholder="Country"
             />
           </label>
           <label>
@@ -99,6 +103,7 @@ const SpotForm = () => {
               value={latitude}
               onChange={(e) => setLat(e.target.value)}
               required
+              placeholder="Latitude"
             />
           </label>
           <label>
@@ -108,6 +113,7 @@ const SpotForm = () => {
               value={longitude}
               onChange={(e) => setLng(e.target.value)}
               required
+              placeholder="Longitude"
             />
           </label>
           <label>
@@ -117,6 +123,7 @@ const SpotForm = () => {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              placeholder="Description"
             />
           </label>
           <label>
@@ -126,6 +133,7 @@ const SpotForm = () => {
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               required
+              placeholder="Price"
             />
           </label>
         </div>
