@@ -37,6 +37,60 @@ const deleteSpot = (spot) => {
   };
 };
 
+export const getAllSpots = () => async (dispatch) => {
+  const response = await csrfFetch("/apr/spots");
+
+  if (response.ok) {
+    const objArr = {};
+    const { Spots } = await response.json();
+    Spots.forEach((spot) => (objArr[spot.id] = spot));
+    dispatch(getSpot(objArr));
+  }
+};
+export const addNewSpot = (spot) => async (dispatch) => {
+  const response = await csrfFetch("/apr/spots", {
+    method: "POST",
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    }),
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(editSpot(add));
+  }
+};
+export const modifySpot = (spot) => async (dispatch) => {
+  const { id } = spot;
+  const response = await csrfFetch(`/apr/spots/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+    }),
+  });
+
+  if (response.ok) {
+    const editData = await response.json();
+    dispatch(addSpot(add));
+  }
+};
+
 const initialState = {};
 
 const spotsReducer = (state = initialState, action) => {
