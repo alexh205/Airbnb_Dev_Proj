@@ -1,39 +1,50 @@
 import { csrfFetch } from "./csrf";
 
 const GET = "spots/GET";
+const GETBYID = "spots/GETBYID";
 const ADD = "spots/ADD";
 const EDIT = "spots/EDIT";
 const USERSPOTS = "spots/USERSPOTS";
 const DELETE = "spots/DELETE";
 
-const getSpot = (spot) => {
+const getSpots = (spots) => {
   return {
     type: GET,
-    spot,
+    spots: spots,
   };
 };
+const getSpotId = (spot) => {
+  return {
+    type: GETBYID,
+    spot: spot,
+  };
+};
+
 const addSpot = (spot) => {
   return {
     type: ADD,
-    spot,
+    spot: spot,
   };
 };
+
 const editSpot = (spot) => {
   return {
     type: EDIT,
-    spot,
+    spot: spot,
   };
 };
+
 const getMySpots = (spot) => {
   return {
     type: USERSPOTS,
-    spot,
+    spot: spot,
   };
 };
+
 const deleteSpot = (spot) => {
   return {
     type: DELETE,
-    spot,
+    spot: spot,
   };
 };
 
@@ -41,12 +52,23 @@ export const getAllSpots = () => async (dispatch) => {
   const response = await csrfFetch("/api/spots");
 
   if (response.ok) {
-    const objArr = {};
     const { Spots } = await response.json();
+    const objArr = {};
     Spots.forEach((spot) => (objArr[spot.id] = spot));
-    dispatch(getSpot(objArr));
+    dispatch(getSpots(objArr));
   }
 };
+
+export const getSpotById = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}`);
+
+  if (response.ok) {
+    const spotData = await response.json();
+
+    dispatch(getSpotId(spotData));
+  }
+};
+
 export const addNewSpot = (spot) => async (dispatch) => {
   const response = await csrfFetch("/api/spots", {
     method: "POST",
@@ -55,9 +77,10 @@ export const addNewSpot = (spot) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(editSpot(data));
+    dispatch(addSpot(data));
   }
 };
+
 export const modifySpot = (spot) => async (dispatch) => {
   const { id } = spot;
   const response = await csrfFetch(`/api/spots/${id}`, {
@@ -77,19 +100,24 @@ const spotsReducer = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
     case GET:
-      newState = { ...state, ...action.spot };
+      newState = { ...action.spots };
+
+      return newState;
+    case GETBYID:
+      newState = { ...state };
+      newState[action.spot.id] = action.spot;
       return newState;
     case ADD:
-      newState = { ...state, ...action.spot };
-      return newState;
-    case EDIT:
-      newState = { ...state, ...action.spot };
+      newState = { ...state, [action.spot.id]: action.spot };
       return newState;
     case USERSPOTS:
-      newState = { ...state, ...action.spot };
+      newState = { ...action.spot };
+      return newState;
+    case EDIT:
+      newState = { ...state, [action.spot.id]: action.spot };
       return newState;
     case DELETE:
-      newState = { ...state, ...action.spot };
+      delete newState[action.spot.id];
       return newState;
     default:
       return state;

@@ -108,6 +108,28 @@ router.get("/", filterQueryValidator, async (req, res) => {
     previewImage.length > 0
       ? (spot.dataValues.previewImage = previewImage[0])
       : (spot.dataValues.previewImage = null);
+
+    //* Ratings
+    const starRating = await Review.findAll({
+      where: {
+        spotId: id,
+      },
+    });
+
+    const numReviews = starRating.length;
+    let ratingTotal = 0;
+
+    starRating.forEach((review) => {
+      if (review.stars) ratingTotal += review.stars;
+    });
+
+    let avgRating;
+
+    ratingTotal > 0
+      ? (avgRating = Math.round((ratingTotal / numReviews) * 10) / 10)
+      : (avgRating = 0);
+
+    spot.dataValues.avgRating = avgRating;
   }
   if (!Object.entries(req.query).length) {
     return res.json({
@@ -201,7 +223,6 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
   return res.status(201).json(newSpot);
 });
 
-
 /**********************************************************************************/
 //! Get spot by a spot id
 
@@ -238,7 +259,7 @@ router.get("/:spotId", spotIdValidation, async (req, res) => {
     : (avgRating = 0);
 
   currentSpot.dataValues.numReviews = numReviews;
-  currentSpot.dataValues.avgStarRating = avgRating;
+  currentSpot.dataValues.avgRating = avgRating;
 
   //* Images
   let imagesList = [];

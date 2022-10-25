@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { getAllSpots } from "../../store/spots";
+import * as spotActions from "../../store/spots";
 import "./Spots.css";
 
 const SpotsPage = () => {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllSpots());
+    dispatch(spotActions.getAllSpots());
   }, [dispatch]);
   const spotsList = useSelector((state) => state.spots);
   const allSpots = Object.values(spotsList);
+
 
   return (
     <div>
@@ -18,15 +19,12 @@ const SpotsPage = () => {
         <div id="spot" key={spot.id}>
           <img src={spot.previewImage} alt={spot.name}></img>
           <div>
-            <i className="values"></i>
-            {Number(spot.avgRating)}
-          </div>
-          <div>
             <Link to={`/spots/${spot.id}`}>{spot.name}</Link>
           </div>
-          <span>{spot.address}</span>
-          <span>{spot.city + ", " + spot.state}</span>
-          <span>${spot.price} per night</span>
+          <div>{spot.address}</div>
+          <div>{spot.city + ", " + spot.state}</div>
+          <div>${spot.price} per night</div>
+          <div>{spot.avgRating}</div>
         </div>
       ))}
     </div>

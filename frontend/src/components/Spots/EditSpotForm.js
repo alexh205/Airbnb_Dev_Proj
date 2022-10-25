@@ -1,9 +1,13 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as spotActions from "../../store/spots";
+import { useState } from "react";
 
-const SpotForm = () => {
+const EditSpotForm = () => {
+  const { spotId } = useParams();
+  const spotData = useSelector((state) => state.spots[spotId]);
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -32,9 +36,10 @@ const SpotForm = () => {
       price,
     };
 
+    spotData = { ...spotData, ...spot };
     try {
-      await dispatch(spotActions.addNewSpot(spot));
-      history.push(`/spots/${spot.id}`);
+      await dispatch(spotActions.modifySpot(spotData));
+      history.push(`/spots/${spotData.id}`);
     } catch (res) {
       setErrors([]);
       const data = await res.json();
@@ -54,7 +59,7 @@ const SpotForm = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              placeholder="Name"
+              placeholder={spotData.name}
             />
           </label>
           <label>
@@ -64,7 +69,7 @@ const SpotForm = () => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               required
-              placeholder="Address"
+              placeholder={spotData.address}
             />
           </label>
           <label>
@@ -143,4 +148,5 @@ const SpotForm = () => {
     </div>
   );
 };
-export default SpotForm;
+
+export default EditSpotForm;
