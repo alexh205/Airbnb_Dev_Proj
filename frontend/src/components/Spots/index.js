@@ -6,29 +6,48 @@ import "./Spots.css";
 
 const SpotsPage = () => {
   const dispatch = useDispatch();
+  let spots;
   useEffect(() => {
     dispatch(spotActions.getAllSpots());
   }, [dispatch]);
+  
   const spotsList = useSelector((state) => state.spots);
-  const allSpots = Object.values(spotsList);
+  if (spotsList) spots = Object.values(spotsList);
 
+  // const allSpots = Object.values(spotsList);
+  // console.log(spotsList)
 
-  return (
-    <div>
-      {allSpots.map((spot) => (
-        <div id="spot" key={spot.id}>
-          <img src={spot.previewImage} alt={spot.name}></img>
-          <div>
-            <Link to={`/spots/${spot.id}`}>{spot.name}</Link>
+  if (spots)
+    return (
+      <div>
+        {spots.map((spot) => (
+          <div key={spot.id} className="listings">
+            <div className="listings_item">
+              <div className="listings_image">
+                <Link to={`/spots/${spot.id}`}>
+                  <img
+                    id="images"
+                    src={spot.previewImage.url}
+                    alt={spot.name}
+                  />
+                </Link>
+              </div>
+              <div className="listings_content">
+                <div className="listings_name">
+                  <div className="listings_icon_text">
+                    <span>{spot.name}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="spacer"></div>
+              <div>{spot.city + ", " + spot.state}</div>
+              <div id="avgRating">★ {spot.avgRating}</div>
+              <div id="listingPrice">${spot.price} night</div>
+            </div>
           </div>
-          <div>{spot.address}</div>
-          <div>{spot.city + ", " + spot.state}</div>
-          <div>${spot.price} per night</div>
-          <div>{spot.avgRating}</div>
-        </div>
-      ))}
-    </div>
-  );
+        ))}
+      </div>
+    );
 };
 
 export default SpotsPage;

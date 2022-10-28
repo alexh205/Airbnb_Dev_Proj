@@ -3,10 +3,10 @@ import { csrfFetch } from "./csrf";
 const SET_USER = "session/setUser";
 const REMOVE_USER = "session/removeUser";
 
-const setUser = (user) => {
+const setUser = (userData) => {
   return {
     type: SET_USER,
-    payload: user,
+    user: userData,
   };
 };
 
@@ -78,8 +78,8 @@ const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
       newState = Object.assign({}, state);
-      if (Object.keys(action.payload).length) {
-        newState.user = action.payload;
+      if (Object.keys(action.user).length) {
+        newState.user = action.user;
       }
       return newState;
     case REMOVE_USER:

@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, NavLink } from "react-router-dom";
 import * as sessionActions from "../../store/session";
+import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignupFormPage/SignupFormModal";
+import "./ProfileButton.css";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
 
   const openMenu = () => {
@@ -26,7 +31,44 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    setShowMenu(false);
+    history.push("/");
   };
+
+  let sessionLinks;
+
+  if (user) {
+    sessionLinks = (
+      <div className="user-links" onClick={(e) => e.stopPropagation()}>
+        <div className="user-links--container">
+          <NavLink id="user-nav-link" to="/profile">
+            Profile
+          </NavLink>
+        </div>
+        <div className="user-links--container">
+          <NavLink id="user-nav-link" to="/profile/spots">
+            Listings
+          </NavLink>
+        </div>
+        <div className="user-links--container">
+          <NavLink id="user-nav-link" to="#" onClick={logout}>
+            Log Out
+          </NavLink>
+        </div>
+      </div>
+    );
+  } else {
+    sessionLinks = (
+      <div className="guest-links" onClick={(e) => e.stopPropagation()}>
+        <div>
+          <LoginFormModal />
+        </div>
+        <div>
+          <SignupFormModal />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

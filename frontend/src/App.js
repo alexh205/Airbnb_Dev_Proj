@@ -8,6 +8,10 @@ import SpotsPage from "./components/Spots";
 import EditSpotForm from "./components/Spots/EditSpotForm";
 import SpotForm from "./components/Spots/SpotForm";
 import SpotDetail from "./components/Spots/SpotDetail";
+import UserSpots from "./components/Spots/UserSpots";
+import Footer from "./components/Footer";
+import UserProfile from "./components/Profile";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -18,6 +22,7 @@ function App() {
 
   return (
     <>
+
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
@@ -26,8 +31,12 @@ function App() {
           <Route exact path="/spots/:spotId" component={SpotDetail} />
           <Route path="/spots" component={SpotForm} />
           <Route path="/spots/:spotId/edit" component={EditSpotForm} />
+          {/* <Route path="/spots/user" component={UserSpots} /> */}
+          <Route path="/profile" component={UserProfile} />
         </Switch>
       )}
+
+      <Footer />
     </>
   );
 }

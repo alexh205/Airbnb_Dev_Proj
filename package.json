@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/alexh205/Airbnb_clone_Project/issues"
   },
-  "homepage": "https://github.com/alexh205/Airbnb_clone_Project#readme"
+  "homepage": "https://github.com/alexh205/Airbnb_clone_Project#readme",
+  "dependencies": {
+    "react-icons": "^4.6.0"
+  }
 }

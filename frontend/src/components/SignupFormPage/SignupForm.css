@@ -1,17 +1,18 @@
-form.signUp_div {
+form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: 5px;
-  padding: 15px;
+  list-style-type: none;
 }
-
 button {
-  background-color: rgb(212, 215, 220);
-  border-radius: 8px;
-  border-color: rgb(50, 50, 51);
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
-
-.input {
-  margin: 2px;
+label {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+input {
+  margin-left: 10px;
 }

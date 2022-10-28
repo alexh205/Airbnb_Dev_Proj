@@ -1,20 +1,24 @@
-img {
-  width: 250px;
-  height: 250px;
-  border-radius: 6px;
+.listings .listings__item {
+  border-top: 1px solid #ebebeb;
+  padding: 24px 0;
+  display: flex;
 }
 
-#spot {
-  border: rgba(0, 51, 255, 0.491);
-  padding: 8px;
+.listings_image {
+  width: 300px;
+  height: 200px;
   border-radius: 10px;
-  box-shadow: 3px 2px rgba(45, 46, 45, 0.5);
+  overflow: hidden;
 }
 
-#spot:hover {
-  box-shadow: 9px 12px rgba(34, 105, 34, 0.5);
+#images {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
 }
 
-::placeholder {
-  color: rgb(106, 105, 105);
+.listings_name {
+  display: flex;
+  justify-items: space-between;
 }
+

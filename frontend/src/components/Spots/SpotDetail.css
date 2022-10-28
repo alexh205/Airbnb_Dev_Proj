@@ -1,0 +1,12 @@
+.img-container{
+  width: 300px;
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.spot-img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}

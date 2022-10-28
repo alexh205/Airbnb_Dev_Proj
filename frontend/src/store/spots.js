@@ -101,7 +101,6 @@ const spotsReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET:
       newState = { ...action.spots };
-
       return newState;
     case GETBYID:
       newState = { ...state };

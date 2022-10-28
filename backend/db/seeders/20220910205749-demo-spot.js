@@ -28,7 +28,7 @@ module.exports = {
           lng: -89.12,
           name: "Fancy Hut",
           description:
-            "Not your typical hut, as it comes with Wifi, TV with Apple TV, Hand Fan, Pool, Glass Roof, with a river near by for your water needs",
+            "Not your typical hut, as it comes with Wifi, TV with Apple TV, Hand Fan, Pool, Glass Roof, with a river near by for all your water needs",
           price: 158,
         },
         {

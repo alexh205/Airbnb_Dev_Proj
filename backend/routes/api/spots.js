@@ -96,18 +96,41 @@ router.get("/", filterQueryValidator, async (req, res) => {
   for (let spot of Spots) {
     const { id } = spot;
 
-    //* previewImages
-    const previewImage = [];
+    //* Images
+    let imagesList = [];
 
-    const spotPhoto = await spot.getSpotImages({ raw: true });
+    const imagesCurrSpot = await Image.findAll({
+      where: { imageableType: "Spot", imageableId: id },
+      attributes: ["id", "url"],
+    });
 
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
+    imagesCurrSpot.forEach((image) => {
+      image = image.toJSON();
 
-    previewImage.length > 0
-      ? (spot.dataValues.previewImage = previewImage[0])
+      imagesList.length > 0 && imagesList[0]
+        ? (imagesList[0].preview = true)
+        : (imagesList.preview = false);
+
+      imagesList.push(image);
+    });
+    
+    imagesList.length > 0
+      ? (spot.dataValues.previewImage = imagesList[0])
       : (spot.dataValues.previewImage = null);
+    spot.dataValues.spotImages = imagesList;
+
+    // //* previewImages
+    // const previewImage = [];
+
+    // const spotPhoto = await spot.getSpotImages({ raw: true });
+
+    // for (let photo of spotPhoto) {
+    //   if (photo.imageableId === id) previewImage.push(photo.url);
+    // }
+
+    // previewImage.length > 0
+    //   ? (spot.dataValues.previewImage = previewImage[0])
+    //   : (spot.dataValues.previewImage = null);
 
     //* Ratings
     const starRating = await Review.findAll({
@@ -279,7 +302,7 @@ router.get("/:spotId", spotIdValidation, async (req, res) => {
     imagesList.push(image);
   });
 
-  currentSpot.dataValues.SpotImages = imagesList;
+  currentSpot.dataValues.spotImages = imagesList;
 
   //* Owner
   const spotOwner = await User.findOne({

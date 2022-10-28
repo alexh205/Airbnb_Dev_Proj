@@ -1,0 +1,35 @@
+.header-left {
+  display: flex;
+  justify-content: left;
+}
+#logo-img {
+  height: 68px;
+  cursor: pointer;
+}
+
+.header {
+  border-bottom: 0.2px solid rgb(238 238 238);
+  padding: 15px 50px;
+  display: flex;
+  justify-content:space-between;
+  /* position: sticky; */
+  top: 0;
+  background: white;
+}
+
+
+.home-container{
+    display: flexbox;
+
+}
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+.logIn-signUp {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
