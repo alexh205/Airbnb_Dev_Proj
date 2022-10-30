@@ -113,24 +113,11 @@ router.get("/", filterQueryValidator, async (req, res) => {
 
       imagesList.push(image);
     });
-    
+
     imagesList.length > 0
       ? (spot.dataValues.previewImage = imagesList[0])
       : (spot.dataValues.previewImage = null);
     spot.dataValues.spotImages = imagesList;
-
-    // //* previewImages
-    // const previewImage = [];
-
-    // const spotPhoto = await spot.getSpotImages({ raw: true });
-
-    // for (let photo of spotPhoto) {
-    //   if (photo.imageableId === id) previewImage.push(photo.url);
-    // }
-
-    // previewImage.length > 0
-    //   ? (spot.dataValues.previewImage = previewImage[0])
-    //   : (spot.dataValues.previewImage = null);
 
     //* Ratings
     const starRating = await Review.findAll({
@@ -331,6 +318,29 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     });
   }
 
+  //* Images
+  let imagesList = [];
+
+  const imagesCurrSpot = await Image.findAll({
+    where: { imageableType: "Spot", imageableId: id },
+    attributes: ["id", "url"],
+  });
+
+  imagesCurrSpot.forEach((image) => {
+    image = image.toJSON();
+
+    imagesList.length > 0 && imagesList[0]
+      ? (imagesList[0].preview = true)
+      : (imagesList.preview = false);
+
+    imagesList.push(image);
+  });
+
+  imagesList.length > 0
+    ? (editedSpot.dataValues.previewImage = imagesList[0])
+    : (editedSpot.dataValues.previewImage = null);
+  editedSpot.dataValues.spotImages = imagesList;
+
   if (req.user.id !== editedSpot.ownerId) {
     return res.status(403).json({ message: "Unauthorized", statusCode: "403" });
   }
@@ -345,6 +355,8 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     name: name,
     description: description,
     price: price,
+    previewImage,
+    spotImages,
   });
 
   return res.json(editedSpot);

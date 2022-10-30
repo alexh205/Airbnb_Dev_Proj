@@ -1,26 +1,91 @@
 import React, { useEffect, useState } from "react";
 import * as spotActions from "../../store/spots";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
 import "./UserSpots.css";
 
 const UserSpots = () => {
   const dispatch = useDispatch();
-  const currentUser = useSelector((state) => state.session.user);
-
-  const allSpots = useSelector((state) => state.spots);
+  const history = useHistory();
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    (async () => {
-      await dispatch(spotActions.getAllSpots());
-    })();
+    dispatch(spotActions.getAllSpots());
   }, [dispatch]);
 
-  const currentUserSpots = Object.values(allSpots).filter((spot) => {
-    return spot.ownerId === currentUser.id;
+  let currentUser = useSelector((state) => state.session.user);
+
+  let allSpots = useSelector((state) => state.spots);
+  allSpots = Object.values(allSpots);
+
+  let listings = [];
+  allSpots.forEach((spot) => {
+    if (spot.ownerId === currentUser.user.id) listings.push(spot);
   });
 
-  console.log(currentUser)
+  console.log(listings);
+
+  if (listings)
+    return (
+      <>
+        <div>
+          <div>
+            <h1>My Listings</h1>
+          </div>
+
+          {listings.map((spot) => (
+            <div>
+              <div>
+                <h2 id="spot-name">{spot?.name}</h2>
+              </div>
+              <div>
+                {spot.spotImages.map((image) => (
+                  <div className="img-container" key={image.id}>
+                    <Link to={`/spots/${spot.id}`}>
+                      <img
+                        className="spot-img"
+                        src={image.url}
+                        alt={spot.name}
+                      />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+              <div>★{spot?.avgRating}</div>
+              <div>{spot?.address}</div>
+              <div>
+                {spot?.city}, {spot?.state}
+              </div>
+              <div id="description">{spot?.description}</div>
+              <div>${spot?.price} per night</div>
+              <div>
+                <Link to={`/spots/${spot.id}/edit`}>
+                  <button>Edit Listing</button>
+                </Link>
+              </div>
+              <div>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    try {
+                      dispatch(spotActions.deleteSpotById(spot.id));
+                      history.push("/spots/current");
+                    } catch (res) {
+                      setErrors([]);
+                      const data = res.json();
+                      if (data && data.message) setErrors(data.errors);
+                    }
+                  }}
+                >
+                  Delete Listing
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    );
 };
 
 export default UserSpots;

@@ -34,10 +34,10 @@ const editSpot = (spot) => {
   };
 };
 
-const getMySpots = (spot) => {
+const userSpots = (userData) => {
   return {
     type: USERSPOTS,
-    spot: spot,
+    spots: userData,
   };
 };
 
@@ -93,6 +93,24 @@ export const modifySpot = (spot) => async (dispatch) => {
     dispatch(editSpot(editData));
   }
 };
+export const deleteSpotById = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}`, {
+    method: "Delete",
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(deleteSpot(data));
+  }
+};
+export const userSpotsById = (userId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${userId}`);
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(userSpots(data));
+  }
+};
 
 const initialState = {};
 
@@ -110,7 +128,7 @@ const spotsReducer = (state = initialState, action) => {
       newState = { ...state, [action.spot.id]: action.spot };
       return newState;
     case USERSPOTS:
-      newState = { ...action.spot };
+      newState = { ...action.spots };
       return newState;
     case EDIT:
       newState = { ...state, [action.spot.id]: action.spot };
