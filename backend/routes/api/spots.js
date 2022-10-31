@@ -114,9 +114,6 @@ router.get("/", filterQueryValidator, async (req, res) => {
       imagesList.push(image);
     });
 
-    imagesList.length > 0
-      ? (spot.dataValues.previewImage = imagesList[0])
-      : (spot.dataValues.previewImage = null);
     spot.dataValues.spotImages = imagesList;
 
     //* Ratings
@@ -192,19 +189,6 @@ router.get("/current", restoreUser, requireAuth, async (req, res) => {
       : (avgRating = 0);
 
     spot.dataValues.avgRating = avgRating;
-
-    //* Images
-    let previewImage = [];
-
-    const spotPhoto = await spot.getSpotImages();
-
-    for (let photo of spotPhoto) {
-      if (photo.imageableId === id) previewImage.push(photo.url);
-    }
-
-    previewImage.length > 0
-      ? (spot.dataValues.previewImage = previewImage[0])
-      : (spot.dataValues.previewImage = null);
   }
 
   return res.json(currSpot);
@@ -214,8 +198,18 @@ router.get("/current", restoreUser, requireAuth, async (req, res) => {
 //! create a spot
 
 router.post("/", requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const {
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    previewImage,
+  } = req.body;
 
   const newSpot = await Spot.create({
     ownerId: req.user.id,
@@ -228,6 +222,7 @@ router.post("/", requireAuth, validateSpot, async (req, res) => {
     name: name,
     description: description,
     price: price,
+    previewImage: previewImage,
   });
 
   return res.status(201).json(newSpot);
@@ -306,8 +301,18 @@ router.get("/:spotId", spotIdValidation, async (req, res) => {
 //! Edit a spot
 
 router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
-  const { address, city, state, country, lat, lng, name, description, price } =
-    req.body;
+  const {
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    previewImage,
+  } = req.body;
 
   const editedSpot = await Spot.findByPk(req.params.spotId);
 
@@ -322,7 +327,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
   let imagesList = [];
 
   const imagesCurrSpot = await Image.findAll({
-    where: { imageableType: "Spot", imageableId: id },
+    where: { imageableType: "Spot", imageableId: editedSpot.id },
     attributes: ["id", "url"],
   });
 
@@ -335,10 +340,6 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
 
     imagesList.push(image);
   });
-
-  imagesList.length > 0
-    ? (editedSpot.dataValues.previewImage = imagesList[0])
-    : (editedSpot.dataValues.previewImage = null);
   editedSpot.dataValues.spotImages = imagesList;
 
   if (req.user.id !== editedSpot.ownerId) {
@@ -355,8 +356,7 @@ router.put("/:spotId", requireAuth, validateSpot, async (req, res) => {
     name: name,
     description: description,
     price: price,
-    previewImage,
-    spotImages,
+    previewImage: previewImage,
   });
 
   return res.json(editedSpot);

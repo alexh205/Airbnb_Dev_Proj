@@ -7,30 +7,30 @@ const EDIT = "spots/EDIT";
 const USERSPOTS = "spots/USERSPOTS";
 const DELETE = "spots/DELETE";
 
-const getSpots = (spots) => {
+const getSpots = (data) => {
   return {
     type: GET,
-    spots: spots,
+    spots: data,
   };
 };
-const getSpotId = (spot) => {
+const getSpotId = (data) => {
   return {
     type: GETBYID,
-    spot: spot,
+    spots: data,
   };
 };
 
-const addSpot = (spot) => {
+const addSpot = (data) => {
   return {
     type: ADD,
-    spot: spot,
+    spots: data,
   };
 };
 
-const editSpot = (spot) => {
+const editSpot = (data) => {
   return {
     type: EDIT,
-    spot: spot,
+    spots: data,
   };
 };
 
@@ -41,10 +41,10 @@ const userSpots = (userData) => {
   };
 };
 
-const deleteSpot = (spot) => {
+const deleteSpot = (data) => {
   return {
     type: DELETE,
-    spot: spot,
+    spots: data,
   };
 };
 
@@ -72,6 +72,7 @@ export const getSpotById = (spotId) => async (dispatch) => {
 export const addNewSpot = (spot) => async (dispatch) => {
   const response = await csrfFetch("/api/spots", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(spot),
   });
 
@@ -85,6 +86,7 @@ export const modifySpot = (spot) => async (dispatch) => {
   const { id } = spot;
   const response = await csrfFetch(`/api/spots/${id}`, {
     method: "PUT",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(spot),
   });
 
@@ -122,19 +124,19 @@ const spotsReducer = (state = initialState, action) => {
       return newState;
     case GETBYID:
       newState = { ...state };
-      newState[action.spot.id] = action.spot;
+      newState[action.spots.id] = action.spots;
       return newState;
     case ADD:
-      newState = { ...state, [action.spot.id]: action.spot };
+      newState = { ...state, [action.spots.id]: action.spots };
       return newState;
     case USERSPOTS:
       newState = { ...action.spots };
       return newState;
     case EDIT:
-      newState = { ...state, [action.spot.id]: action.spot };
+      newState = { ...state, [action.spots.id]: action.spots };
       return newState;
     case DELETE:
-      delete newState[action.spot.id];
+      delete newState[action.spots.id];
       return newState;
     default:
       return state;

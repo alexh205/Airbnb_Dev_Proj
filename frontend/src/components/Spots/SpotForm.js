@@ -16,6 +16,7 @@ const SpotForm = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
   const [errors, setErrors] = useState([]);
 
   const handleSubmit = async (e) => {
@@ -30,6 +31,7 @@ const SpotForm = () => {
       name,
       description,
       price,
+      previewImage,
     };
 
     try {
@@ -68,7 +70,7 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            City
+            City:
             <input
               type="text"
               value={city}
@@ -78,7 +80,7 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            State
+            State:
             <input
               type="text"
               value={state}
@@ -88,7 +90,7 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            Country
+            Country:
             <input
               type="text"
               value={country}
@@ -98,7 +100,7 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            Latitude
+            Latitude:
             <input
               type="text"
               value={lat}
@@ -108,7 +110,7 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            Longitude
+            Longitude:
             <input
               type="text"
               value={lng}
@@ -118,9 +120,9 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            Description
+            Description:
             <input
-              type="text"
+              type="textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
@@ -128,13 +130,23 @@ const SpotForm = () => {
             />
           </label>
           <label>
-            Price
+            Price:
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               required
-              placeholder="Price"
+              placeholder="$ Price"
+            />
+          </label>
+          <label>
+            Preview Image:
+            <input
+              type="text"
+              value={previewImage}
+              onChange={(e) => setPreviewImage(e.target.value)}
+              required
+              placeholder="url"
             />
           </label>
         </div>

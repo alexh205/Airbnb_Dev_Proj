@@ -49,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
           isNumeric: true,
         },
       },
+      previewImage: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,

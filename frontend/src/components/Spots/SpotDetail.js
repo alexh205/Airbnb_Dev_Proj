@@ -43,21 +43,20 @@ const SpotDetail = () => {
           </button>
         </div>
         <div>
-          <Link to={`/spots/${spot.id}/edit`}>
+          <Link to={`/spot-edit/${spot.id}`}>
             <button>Edit Listing</button>
           </Link>
         </div>
       </>
     );
   }
-
+  
   if (spot)
     return (
       <div>
         <div>
           <h2 id="spot-name">{spot?.name}</h2>
         </div>
-
         <div>
           {spot.spotImages.map((image) => (
             <div className="img-container" key={image?.id}>

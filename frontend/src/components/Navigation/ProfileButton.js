@@ -19,7 +19,7 @@ function ProfileButton({ user }) {
   };
 
   const openSpots = () => {
-    history.push("/spots/current");
+    history.push("/userSpots");
   };
   useEffect(() => {
     if (!showMenu) return;

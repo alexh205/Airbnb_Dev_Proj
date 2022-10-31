@@ -10,12 +10,9 @@ const SpotsPage = () => {
   useEffect(() => {
     dispatch(spotActions.getAllSpots());
   }, [dispatch]);
-  
+
   const spotsList = useSelector((state) => state.spots);
   if (spotsList) spots = Object.values(spotsList);
-
-  // const allSpots = Object.values(spotsList);
-  // console.log(spotsList)
 
   if (spots)
     return (
@@ -25,11 +22,7 @@ const SpotsPage = () => {
             <div className="listings_item">
               <div className="listings_image">
                 <Link to={`/spots/${spot.id}`}>
-                  <img
-                    id="images"
-                    src={spot.previewImage.url}
-                    alt={spot.name}
-                  />
+                  <img id="images" src={spot.previewImage} alt={spot.name} />
                 </Link>
               </div>
               <div className="listings_content">

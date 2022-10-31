@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Spots", {
@@ -47,6 +47,9 @@ module.exports = {
       },
       price: {
         type: Sequelize.INTEGER,
+      },
+      previewImage: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

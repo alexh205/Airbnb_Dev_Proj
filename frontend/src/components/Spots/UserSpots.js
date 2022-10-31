@@ -24,33 +24,25 @@ const UserSpots = () => {
     if (spot.ownerId === currentUser.user.id) listings.push(spot);
   });
 
-  console.log(listings);
-
-  if (listings)
-    return (
-      <>
+  return (
+    <>
+      <div>
+        <Link to={'/spots'}>
+          <button>Create Listing</button>
+        </Link>
+      </div>
+      {listings && (
         <div>
           <div>
             <h1>My Listings</h1>
           </div>
-
           {listings.map((spot) => (
             <div>
               <div>
                 <h2 id="spot-name">{spot?.name}</h2>
               </div>
-              <div>
-                {spot.spotImages.map((image) => (
-                  <div className="img-container" key={image.id}>
-                    <Link to={`/spots/${spot.id}`}>
-                      <img
-                        className="spot-img"
-                        src={image.url}
-                        alt={spot.name}
-                      />
-                    </Link>
-                  </div>
-                ))}
+              <div id="img-container">
+                <img src={spot.previewImage} />
               </div>
               <div>★{spot?.avgRating}</div>
               <div>{spot?.address}</div>
@@ -60,7 +52,7 @@ const UserSpots = () => {
               <div id="description">{spot?.description}</div>
               <div>${spot?.price} per night</div>
               <div>
-                <Link to={`/spots/${spot.id}/edit`}>
+                <Link to={`/spot-edit/${spot.id}`}>
                   <button>Edit Listing</button>
                 </Link>
               </div>
@@ -70,7 +62,7 @@ const UserSpots = () => {
                     e.preventDefault();
                     try {
                       dispatch(spotActions.deleteSpotById(spot.id));
-                      history.push("/spots/current");
+                      history.push("/userSpots");
                     } catch (res) {
                       setErrors([]);
                       const data = res.json();
@@ -84,8 +76,9 @@ const UserSpots = () => {
             </div>
           ))}
         </div>
-      </>
-    );
+      )}
+    </>
+  );
 };
 
 export default UserSpots;
