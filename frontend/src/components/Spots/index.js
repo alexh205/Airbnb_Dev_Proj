@@ -9,7 +9,7 @@ const SpotsPage = () => {
   let spots;
   useEffect(() => {
     dispatch(spotActions.getAllSpots());
-  }, [dispatch]);
+  }, [dispatch, spots]);
 
   const spotsList = useSelector((state) => state.spots);
   if (spotsList) spots = Object.values(spotsList);

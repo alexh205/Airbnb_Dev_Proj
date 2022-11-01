@@ -14,19 +14,18 @@ const ReviewForm = ({ spotId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors([]);
-    let payload = {
-      spotId,
+    let reviewData = {
       review,
       stars,
     };
 
     try {
-      await dispatch(reviewActions.addNewReview(payload));
+      dispatch(reviewActions.addNewReview(reviewData));
 
       dispatch(reviewActions.getAllReviews(spotId));
       history.push(`/spots/${spotId}`);
     } catch (res) {
-      const data = await res.json();
+      const data = res.json();
 
       const err = [data.message];
       if (data && data.message) setErrors(err);
@@ -40,8 +39,8 @@ const ReviewForm = ({ spotId }) => {
           <h2>Create Review</h2>
           {errors && (
             <ul>
-              {errors.map((error, idx) => (
-                <li className="errors" key={idx}>
+              {errors.map((error, i) => (
+                <li className="errors" key={i}>
                   {error}
                 </li>
               ))}
@@ -61,9 +60,9 @@ const ReviewForm = ({ spotId }) => {
               type="number"
               value={stars}
               onChange={(e) => setStars(e.target.value)}
-              required
               max="5"
               min="1"
+              required
             />
           </label>
 

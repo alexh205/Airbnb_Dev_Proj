@@ -6,28 +6,28 @@ const EDIT = "reviews/EDIT";
 const DELETE = "reviews/DELETE";
 const USERREVIEWS = "reviews/USERREVIEWS";
 
-const getReviews = (reviews) => ({
+const getReviews = (data) => ({
   type: GET,
-  reviews,
+  reviews: data,
 });
-const addReview = (review) => ({
+const addReview = (data) => ({
   type: ADD,
-  review,
+  reviews: data,
 });
 
-const editReview = (review) => ({
+const editReview = (data) => ({
   type: EDIT,
-  review,
+  reviews: data,
 });
 
-const userReviews = (reviews) => ({
+const userReviews = (data) => ({
   type: USERREVIEWS,
-  reviews,
+  reviews: data,
 });
 
-const deleteReview = (review) => ({
+const deleteReview = (data) => ({
   type: DELETE,
-  review,
+  reviews: data,
 });
 
 export const getAllReviews = (id) => async (dispatch) => {
@@ -100,16 +100,16 @@ const reviewsReducer = (state = initialState, action) => {
       newState = { ...action.reviews };
       return newState;
     case ADD:
-      newState = { ...state, [action.newReview.id]: action.newReview };
+      newState = { ...state, [action.reviews.id]: action.reviews };
       return newState;
     case USERREVIEWS:
       newState = { ...action.reviews };
       return newState;
     case EDIT:
-      newState = { ...state, [action.review.id]: action.review };
+      newState = { ...state, [action.reviews.id]: action.reviews };
       return newState;
     case DELETE:
-      delete newState[action.review.id];
+      delete newState[action.reviews.id];
       return newState;
     default:
       return state;

@@ -26,6 +26,11 @@ const SpotDetail = () => {
     options = (
       <>
         <div>
+          <Link to={`/spot-edit/${spot.id}`}>
+            <button>Edit Listing</button>
+          </Link>
+        </div>
+        <div>
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -42,27 +47,31 @@ const SpotDetail = () => {
             Delete Listing
           </button>
         </div>
-        <div>
-          <Link to={`/spot-edit/${spot.id}`}>
-            <button>Edit Listing</button>
-          </Link>
-        </div>
       </>
     );
   }
-  
+
   if (spot)
     return (
       <div>
         <div>
+          <Link to={`/`}>
+            <button>Return to Listings</button>
+          </Link>
+        </div>
+        <div>
           <h2 id="spot-name">{spot?.name}</h2>
         </div>
         <div>
-          {spot.spotImages.map((image) => (
-            <div className="img-container" key={image?.id}>
-              <img className="spot-img" src={image?.url} alt={spot?.name} />
-            </div>
-          ))}
+          {spot.spotImages.length > 0 ? (
+            spot.spotImages.map((image, i) => (
+              <div className="img-container" key={i}>
+                <img className="spot-img" src={image?.url} alt={spot?.name} />
+              </div>
+            ))
+          ) : (
+            <p>No Images Found</p>
+          )}
         </div>
         <div>★{spot?.avgRating}</div>
         <div>{spot?.address}</div>

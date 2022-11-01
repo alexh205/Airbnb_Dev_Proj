@@ -9,6 +9,8 @@ import SpotForm from "./components/Spots/SpotForm";
 import SpotDetail from "./components/Spots/SpotDetail";
 import UserSpots from "./components/Spots/UserSpots";
 import ReviewForm from "./components/Reviews/ReviewForm";
+import UserReviews from "./components/Reviews/UserReviews";
+import EditReviews from "./components/Reviews/EditReviews";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,8 +26,10 @@ function App() {
         <Switch>
           <Route exact path="/" component={SpotsPage} />
           <Route exact path="/spots" component={SpotForm} />
+          <Route exact path="/reviews/user" component={UserReviews} />
           <Route exact path="/userSpots" component={UserSpots} />
           <Route path="/spots/:spotId" component={SpotDetail} />
+          <Route path="/review-edit/:reviewId" component={EditReviews} />
           <Route path="/spot-edit/:spotId" component={EditSpotForm} />
           <Route exact path="/spots/:spotId/reviews" component={ReviewForm} />
         </Switch>

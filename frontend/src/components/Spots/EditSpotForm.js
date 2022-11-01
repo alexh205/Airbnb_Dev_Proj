@@ -1,16 +1,17 @@
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { modifySpot } from "../../store/spots";
+import { useHistory, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
+import * as spotActions from "../../store/spots";
 
 const EditSpotForm = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
+  //! page breaks on page refresh
   // useEffect(() => {
-  //   dispatch(spotActions.getAllSpots());
-  // }, [dispatch]);
+  //   dispatch(getAllSpots());
+  // }, [dispatch, spotId]);
 
   let spotData = useSelector((state) => state.spots[spotId]);
 
@@ -45,10 +46,9 @@ const EditSpotForm = () => {
     };
 
     spotData = { ...spotData, ...spot };
-    console.log(spotData);
 
     try {
-      dispatch(modifySpot(spotData));
+      dispatch(spotActions.modifySpot(spotData));
 
       history.push(`/spots/${spotData.id}`);
     } catch (res) {
@@ -63,7 +63,7 @@ const EditSpotForm = () => {
       <div>
         <form className="spots-app" onSubmit={onSubmit}>
           <div>
-            <h2>Create a New Spot</h2>
+            <h2>Update {spotData.name}</h2>
             <div>
               <label>
                 Name:
@@ -137,7 +137,7 @@ const EditSpotForm = () => {
             <div>
               <label>
                 Description:
-                <input
+                <textarea
                   type="textarea"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -146,7 +146,7 @@ const EditSpotForm = () => {
             </div>
             <div>
               <label>
-                Price:
+                Price ($):
                 <input
                   type="text"
                   value={price}
@@ -168,8 +168,20 @@ const EditSpotForm = () => {
               </div>
             </div>
           </div>
-          <input type="submit" />
+          <div>
+            <input type="submit" />
+          </div>
         </form>
+        <div>
+          <Link to={`/userSpots`}>
+            <button>User Listings</button>
+          </Link>
+        </div>
+        <div>
+          <Link to={`/`}>
+            <button>Listings</button>
+          </Link>
+        </div>
       </div>
     );
 };

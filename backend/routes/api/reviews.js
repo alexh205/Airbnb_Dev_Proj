@@ -99,24 +99,6 @@ router.get("/current", requireAuth, async (req, res) => {
     ],
   });
 
-  for (let review of currUserReviews) {
-    let spotId = review.dataValues.Spot.dataValues.id;
-
-    //* Images
-    let previewImage = [];
-
-    let spotPhoto = await Image.findAll({
-      where: [{ imageableId: spotId }, { imageableType: "Spot" }],
-    });
-
-    for (let photo of spotPhoto) {
-      previewImage.push(photo.url);
-    }
-
-    previewImage.length > 0
-      ? (review.dataValues.Spot.dataValues.previewImage = previewImage[0])
-      : (review.dataValues.Spot.dataValues.previewImage = null);
-  }
 
   if (!currUserReviews.length) {
     return res.status(404).json({

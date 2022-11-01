@@ -27,8 +27,13 @@ const UserSpots = () => {
   return (
     <>
       <div>
-        <Link to={'/spots'}>
+        <Link to={"/spots"}>
           <button>Create Listing</button>
+        </Link>
+      </div>
+      <div>
+        <Link to={"/"}>
+          <button>Return to Listing</button>
         </Link>
       </div>
       {listings && (
@@ -36,8 +41,8 @@ const UserSpots = () => {
           <div>
             <h1>My Listings</h1>
           </div>
-          {listings.map((spot) => (
-            <div>
+          {listings.map((spot, i) => (
+            <div key={i}>
               <div>
                 <h2 id="spot-name">{spot?.name}</h2>
               </div>
