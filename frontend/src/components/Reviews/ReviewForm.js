@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import * as reviewActions from "../../store/reviews";
 
-const ReviewForm = ({ spotId }) => {
+const ReviewForm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
+  const { spotId } = useParams();
 
   const [review, setReview] = useState("");
   const [stars, setStars] = useState("");
@@ -15,6 +16,7 @@ const ReviewForm = ({ spotId }) => {
     e.preventDefault();
     setErrors([]);
     let reviewData = {
+      spotId,
       review,
       stars,
     };
@@ -36,7 +38,7 @@ const ReviewForm = ({ spotId }) => {
     <div id="review-form-container">
       <div id="form-container">
         <form onSubmit={handleSubmit}>
-          <h2>Create Review</h2>
+          <h2>Add a Review</h2>
           {errors && (
             <ul>
               {errors.map((error, i) => (

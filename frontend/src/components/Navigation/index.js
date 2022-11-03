@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormPage/SignupFormModal";
-import ThreeLines from "../../images/horizontal-lines.png";
+import ProfileImg from "../../images/profile.png";
 import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
@@ -38,7 +38,7 @@ function Navigation({ isLoaded }) {
         <div className="collapsible">
           <button className="toggle" onClick={() => setIsOpen(!isOpen)}>
             <div className="toggle-container">
-              <img src={ThreeLines} alt="profile-img" id="menu-toggle" />{" "}
+              <img src={ProfileImg} alt="profile-img" id="menu-toggle" />{" "}
             </div>
           </button>
           {isOpen &&

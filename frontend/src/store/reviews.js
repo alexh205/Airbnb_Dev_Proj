@@ -6,6 +6,8 @@ const EDIT = "reviews/EDIT";
 const DELETE = "reviews/DELETE";
 const USERREVIEWS = "reviews/USERREVIEWS";
 
+// const ADDREVIMAGE = "images/ADDREVIMAGE";
+
 const getReviews = (data) => ({
   type: GET,
   reviews: data,
@@ -30,23 +32,38 @@ const deleteReview = (data) => ({
   reviews: data,
 });
 
-export const getAllReviews = (id) => async (dispatch) => {
-  const response = await csrfFetch(`/api/spots/${id}/reviews`);
-  const { Reviews } = await response.json();
+// const addReviewImages = (url, reviewId, userId) => {
+//   return {
+//     type: ADDREVIMAGE,
+//     payload1: url,
+//     payload2: reviewId,
+//     payload3: userId,
+//   };
+// };
+
+export const renderReviews = () => {
+  return {
+    type: "RENDERREVIEWS",
+  };
+};
+
+export const getAllReviews = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
 
   if (response.ok) {
+    const { Reviews } = await response.json();
     const obj = {};
     Reviews.forEach((review) => (obj[review.id] = review));
     dispatch(getReviews(obj));
   }
 };
 
-export const addNewReview = (review) => async (dispatch) => {
-  const { spotId } = review;
+export const addNewReview = (data) => async (dispatch) => {
+  const { spotId } = data;
   const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(review),
+    body: JSON.stringify(data),
   });
   if (response.ok) {
     const newReview = await response.json();
@@ -54,11 +71,26 @@ export const addNewReview = (review) => async (dispatch) => {
   }
 };
 
+// export const createReviewImage =
+//   (url, reviewId, userId) => async (dispatch) => {
+//     const response = await csrfFetch(`/api/reviews/${reviewId}/images`, {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify({ url, userId }),
+//     });
+
+//     if (response.ok) {
+//       const newReview = await response.json();
+
+//       dispatch(addReviewImages(newReview));
+//     }
+//   };
+
 export const getUserReviews = () => async (dispatch) => {
   const response = await csrfFetch("/api/reviews/current");
-  const { Reviews } = await response.json();
 
   if (response.ok) {
+    const { Reviews } = await response.json();
     const obj = {};
     Reviews.forEach((review) => (obj[review.id] = review));
 
@@ -111,6 +143,16 @@ const reviewsReducer = (state = initialState, action) => {
     case DELETE:
       delete newState[action.reviews.id];
       return newState;
+    // case createReviewImage:
+    //   const imagesArr = newState[action.payload2];
+    //   imagesArr[imagesArr.length] = {
+    //     url: action.payload1,
+    //     userId: action.payload3,
+    //   };
+    //   return newState;
+    case "RENDERREVIEWS":
+      return initialState;
+
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as spotActions from "../../store/spots";
+import * as reviewActions from "../../store/reviews";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 
@@ -10,9 +11,7 @@ const UserSpots = () => {
   const history = useHistory();
   const [errors, setErrors] = useState([]);
 
-  useEffect(() => {
-    dispatch(spotActions.getAllSpots());
-  }, [dispatch]);
+  useEffect(() => {}, [dispatch]);
 
   let currentUser = useSelector((state) => state.session.user);
 
@@ -20,16 +19,24 @@ const UserSpots = () => {
   allSpots = Object.values(allSpots);
 
   let listings = [];
-  allSpots.forEach((spot) => {
-    if (spot.ownerId === currentUser.user.id) listings.push(spot);
-  });
+  if (allSpots)
+    allSpots.forEach((spot) => {
+      if (spot.ownerId === currentUser.user.id) listings.push(spot);
+    });
 
   return (
     <>
       <div>
         <Link to={"/spots"}>
-          <button>Create Listing</button>
+          <button>Host your Property</button>
         </Link>
+      </div>
+      <div>
+        <div>
+          <Link to={`/reviews/user`}>
+            <button>My Reviews</button>
+          </Link>
+        </div>
       </div>
       <div>
         <Link to={"/"}>
@@ -41,6 +48,7 @@ const UserSpots = () => {
           <div>
             <h1>My Listings</h1>
           </div>
+
           {listings.map((spot, i) => (
             <div key={i}>
               <div>
@@ -49,7 +57,7 @@ const UserSpots = () => {
               <div id="img-container">
                 <img src={spot.previewImage} />
               </div>
-              <div>★{spot?.avgRating}</div>
+              <div>⭐ {spot?.avgRating}</div>
               <div>{spot?.address}</div>
               <div>
                 {spot?.city}, {spot?.state}

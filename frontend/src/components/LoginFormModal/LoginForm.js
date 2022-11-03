@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
 import { useDispatch } from "react-redux";
 import "./LoginForm.css";
+import { useHistory } from "react-router-dom";
 
 function LoginForm() {
   const dispatch = useDispatch();
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
+  const history = useHistory();
+
+  //! spot detail user login-in error message,
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,6 +19,7 @@ function LoginForm() {
     return dispatch(sessionActions.login({ credential, password })).catch(
       async (res) => {
         const data = await res.json();
+        history.push("/userSpots");
         if (data && data.errors) setErrors(data.errors);
       }
     );

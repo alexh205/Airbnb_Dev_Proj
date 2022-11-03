@@ -36,12 +36,14 @@ const SpotForm = () => {
 
     try {
       await dispatch(spotActions.addNewSpot(spot));
-      history.push(`/spots/${spot.id}`);
+      history.push(`/`);
     } catch (res) {
       setErrors([]);
       const data = await res.json();
       if (data && data.message) setErrors(data.errors);
     }
+
+
   };
 
   return (

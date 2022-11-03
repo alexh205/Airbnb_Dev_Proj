@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, NavLink } from "react-router-dom";
+import { useHistory, NavLink, Link } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
-import LoginFormModal from "../LoginFormModal";
-import SignupFormModal from "../SignupFormPage/SignupFormModal";
 import "./ProfileButton.css";
 import ProfileImg from "../../images/profile.png";
 
@@ -13,14 +11,19 @@ function ProfileButton({ user }) {
   const history = useHistory();
   const [showMenu, setShowMenu] = useState(false);
 
+  useEffect(() => {
+    const sessionUser = async () => {
+      await dispatch(sessionActions.restoreUser());
+
+      sessionUser();
+    };
+  }, [dispatch]);
+
   const openMenu = () => {
     if (showMenu) return;
     setShowMenu(true);
   };
 
-  const openSpots = () => {
-    history.push("/userSpots");
-  };
   useEffect(() => {
     if (!showMenu) return;
 
@@ -33,69 +36,86 @@ function ProfileButton({ user }) {
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
 
+  let Listings = (
+    <>
+      <div>
+        <div>
+          <Link to={`/userSpots`}>My Listings</Link>
+        </div>
+      </div>
+    </>
+  );
+
+  let Reviews = (
+    <>
+      <div>
+        <div>
+          <Link to={`/reviews/user`}>My Reviews</Link>
+        </div>
+      </div>
+    </>
+  );
+
+  let NewListing = (
+    <>
+      <div>
+        <div>
+          <Link to={`/spots`}>Host your Property</Link>
+        </div>
+      </div>
+    </>
+  );
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
     setShowMenu(false);
-    history.push("/");
   };
 
-  // let sessionLinks;
+  const currUser = useSelector((state) => state.session);
+  let userInfo = currUser.user.user;
 
-  // if (user) {
-  //   sessionLinks = (
-  //     <div className="user-links" onClick={(e) => e.stopPropagation()}>
-  //       <div className="user-links--container">
-  //         <NavLink id="user-nav-link" to="/profile">
-  //           Profile
-  //         </NavLink>
-  //       </div>
-  //       <div className="user-links--container">
-  //         <NavLink id="user-nav-link" to="/profile/spots">
-  //           Listings
-  //         </NavLink>
-  //       </div>
-  //       <div className="user-links--container">
-  //         <NavLink id="user-nav-link" to="#" onClick={logout}>
-  //           Log Out
-  //         </NavLink>
-  //       </div>
-  //     </div>
-  //   );
-  // } else {
-  //   sessionLinks = (
-  //     <div className="guest-links" onClick={(e) => e.stopPropagation()}>
-  //       <div>
-  //         <LoginFormModal />
-  //       </div>
-  //       <div>
-  //         <SignupFormModal />
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
+  if (currUser && currUser.user) userInfo = currUser.user.user;
   return (
     <>
-      <button onClick={openMenu}>
-        <img src={ProfileImg} alt="profile-img" id="profile-toggle" />
+      <div>
+        <button onClick={openMenu}>
+          <img src={ProfileImg} alt="profile-img" id="profile-toggle" />
 
-        <i className="fas fa-user-circle" />
-      </button>
-      {showMenu && (
-        <ul className="profile-dropdown">
-          <li>{user.username}</li>
-          <li>{user.email}</li>
-          <li>
-            <button onClick={logout}>Log Out</button>
-            <div className="user-spots--container">
-              <button id="user-spot-link" to="#" onClick={openSpots}>
-                Spots
-              </button>
+          <i className="fas fa-user-circle" />
+          <p>{userInfo?.username}</p>
+        </button>
+
+        {showMenu && (
+          <div className="profile-dropdown">
+            <div>
+              <label>
+                Username:
+                <b>
+                  <i> {userInfo?.username}</i>
+                </b>
+              </label>
             </div>
-          </li>
-        </ul>
-      )}
+            <div>
+              <label>
+                Email:
+                <b>
+                  <i> {userInfo?.email}</i>
+                </b>
+              </label>
+            </div>
+            <div>
+              <div>{Listings}</div>
+              <div>{NewListing}</div>
+              <div>{Reviews}</div>
+            </div>
+
+            <div>
+              <button onClick={logout}>Log Out</button>
+            </div>
+          </div>
+        )}
+      </div>
     </>
   );
 }

@@ -8,29 +8,39 @@ const EditSpotForm = () => {
   const { spotId } = useParams();
   const dispatch = useDispatch();
 
-  //! page breaks on page refresh
-  // useEffect(() => {
-  //   dispatch(getAllSpots());
-  // }, [dispatch, spotId]);
+  const history = useHistory();
 
   let spotData = useSelector((state) => state.spots[spotId]);
 
-  const history = useHistory();
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [country, setCountry] = useState("");
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [previewImage, setPreviewImage] = useState("");
 
-  const [address, setAddress] = useState(spotData.address);
-  const [city, setCity] = useState(spotData.city);
-  const [state, setState] = useState(spotData.state);
-  const [country, setCountry] = useState(spotData.country);
-  const [lat, setLat] = useState(spotData.lat);
-  const [lng, setLng] = useState(spotData.lng);
-  const [name, setName] = useState(spotData.name);
-  const [description, setDescription] = useState(spotData.description);
-  const [price, setPrice] = useState(spotData.price);
-  const [previewImage, setPreviewImage] = useState(spotData.previewImage);
+  useEffect(() => {
+    if (spotData) {
+      setAddress(spotData.address);
+      setCity(spotData.city);
+      setState(spotData.state);
+      setCountry(spotData.country);
+      setLat(spotData.lat);
+      setLng(spotData.lng);
+      setName(spotData.name);
+      setDescription(spotData.description);
+      setPrice(spotData.price);
+      setPreviewImage(spotData.previewImage);
+    }
+  }, [spotData]);
 
   const [errors, setErrors] = useState([]);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     let spot = {
       address,
@@ -48,12 +58,12 @@ const EditSpotForm = () => {
     spotData = { ...spotData, ...spot };
 
     try {
-      dispatch(spotActions.modifySpot(spotData));
+      await dispatch(spotActions.modifySpot(spotData));
 
       history.push(`/spots/${spotData.id}`);
     } catch (res) {
       setErrors([]);
-      const data = res.json();
+      const data = await res.json();
       if (data && data.message) setErrors(data.errors);
     }
   };
@@ -63,7 +73,7 @@ const EditSpotForm = () => {
       <div>
         <form className="spots-app" onSubmit={onSubmit}>
           <div>
-            <h2>Update {spotData.name}</h2>
+            <h2>Update {name}</h2>
             <div>
               <label>
                 Name:
@@ -164,7 +174,9 @@ const EditSpotForm = () => {
                 />
               </label>
               <div id="img-preview">
-                {previewImage.length > 0 && <img src={previewImage} />}
+                {previewImage && previewImage.length > 0 && (
+                  <img src={previewImage} />
+                )}
               </div>
             </div>
           </div>
@@ -172,16 +184,6 @@ const EditSpotForm = () => {
             <input type="submit" />
           </div>
         </form>
-        <div>
-          <Link to={`/userSpots`}>
-            <button>User Listings</button>
-          </Link>
-        </div>
-        <div>
-          <Link to={`/`}>
-            <button>Listings</button>
-          </Link>
-        </div>
       </div>
     );
 };

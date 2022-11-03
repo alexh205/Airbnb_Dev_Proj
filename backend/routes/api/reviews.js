@@ -147,7 +147,7 @@ router.post("/:reviewId/images", requireAuth, async (req, res) => {
     imageableId: currentReview.id,
     imageableType: "Review",
     url: req.body.url,
-    userId: req.user.id,
+    userId: req.body.userId,
   });
 
   const { id, url } = newImage;

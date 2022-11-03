@@ -460,10 +460,10 @@ router.post(
       }
     }
 
-    const { review, stars } = req.body;
+    const { review, stars, spotId } = req.body;
     const newReview = await Review.create({
       userId: req.user.id,
-      spotId: req.params.spotId,
+      spotId: spotId,
       review: review,
       stars: stars,
     });
