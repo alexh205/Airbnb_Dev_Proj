@@ -18,6 +18,7 @@ function LoginForm() {
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password })).catch(
       async (res) => {
+        console.log(res);
         const data = await res.json();
         history.push("/userSpots");
         if (data && data.errors) setErrors(data.errors);

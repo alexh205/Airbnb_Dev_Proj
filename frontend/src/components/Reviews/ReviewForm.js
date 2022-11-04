@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import * as reviewActions from "../../store/reviews";
+import * as sessionActions from "../../store/session";
 
 const ReviewForm = () => {
   const dispatch = useDispatch();
@@ -11,6 +12,12 @@ const ReviewForm = () => {
   const [review, setReview] = useState("");
   const [stars, setStars] = useState("");
   const [errors, setErrors] = useState([]);
+
+  useEffect(() => {
+    dispatch(sessionActions.restoreUser());
+  }, [dispatch]);
+
+  const userObj = useSelector((state) => state.session.user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,45 +41,48 @@ const ReviewForm = () => {
     }
   };
 
-  return (
-    <div id="review-form-container">
-      <div id="form-container">
-        <form onSubmit={handleSubmit}>
-          <h2>Add a Review</h2>
-          {errors && (
-            <ul>
-              {errors.map((error, i) => (
-                <li className="errors" key={i}>
-                  {error}
-                </li>
-              ))}
-            </ul>
-          )}
-          <label>
-            Review
-            <textarea
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              required
-            />
-          </label>
-          <label>
-            Stars
-            <input
-              type="number"
-              value={stars}
-              onChange={(e) => setStars(e.target.value)}
-              max="5"
-              min="1"
-              required
-            />
-          </label>
 
-          <input type="submit" />
-        </form>
+    return (
+      <div id="review-form-container">
+        {/* {userObj && userObj.user !== null && ()} */}
+        <div id="form-container">
+
+          <form onSubmit={handleSubmit}>
+            <h2>Add a Review</h2>
+            {errors && (
+              <ul>
+                {errors.map((error, i) => (
+                  <li className="errors" key={i}>
+                    {error}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <label>
+              Review
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Stars
+              <input
+                type="number"
+                value={stars}
+                onChange={(e) => setStars(e.target.value)}
+                max="5"
+                min="1"
+                required
+              />
+            </label>
+
+            <input type="submit" />
+          </form>
+        </div>
       </div>
-    </div>
-  );
+    );
 };
 
 export default ReviewForm;

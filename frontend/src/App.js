@@ -14,6 +14,7 @@ import ReviewForm from "./components/Reviews/ReviewForm";
 import UserReviews from "./components/Reviews/UserReviews";
 import EditReviews from "./components/Reviews/EditReviews";
 import SpotReviews from "./components/Reviews/SpotReviews";
+import Footer from "./components/Footer";
 
 function App() {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ function App() {
       <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route exact path="/" component={SpotsPage}/>
+          <Route exact path="/" component={SpotsPage} />
           <Route exact path="/spots" component={SpotForm} />
           <Route exact path="/spotReviews/:spotId" component={SpotReviews} />
           <Route exact path="/reviews/user" component={UserReviews} />
@@ -40,6 +41,7 @@ function App() {
           <Route path="/spot-edit/:spotId" component={EditSpotForm} />
         </Switch>
       )}
+      <Footer />
     </>
   );
 }

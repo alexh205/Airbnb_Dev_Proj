@@ -17,42 +17,46 @@ const SpotsPage = () => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  const currnUser = useSelector((state) => state.session.user);
   const spotsList = useSelector((state) => state.spots);
   if (spotsList) spots = Object.values(spotsList);
 
   if (spots)
     return (
       <>
-        <div>
-          <div>
-            {currnUser !== null && (
-              <div>
-                <Link to={"/spots"}>
-                  <button>Host your Property</button>
-                </Link>
-              </div>
-            )}
-          </div>
+        <div id="main-container">
           {spots.map((spot) => (
             <div key={spot.id} className="listings">
               <div className="listings_item">
-                <div className="listings_image">
+                <div
+                  className="listings_image"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <Link to={`/spots/${spot.id}`}>
-                    <img id="images" src={spot.previewImage} alt={spot.name} />
+                    {spot.previewImage && spot.previewImage !== null ? (
+                      <img
+                        id="images"
+                        src={spot.previewImage}
+                        alt={spot.name}
+                      />
+                    ) : (
+                      <p>
+                        <b>No Image Available</b>
+                      </p>
+                    )}
                   </Link>
                 </div>
-                <div className="listings_content">
-                  <div className="listings_name">
-                    <div className="listings_icon_text">
-                      <span>{spot.name}</span>
-                    </div>
-                  </div>
+                <div
+                  className="listings_content"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Link to={`/spots/${spot.id}`}>
+                    <p className="details">{spot.name}</p>
+                  </Link>
                 </div>
                 <div>
-                  <div>{spot.city + ", " + spot.state}</div>
-                  <div id="avgRating">⭐ {spot.avgRating}</div>
-                  <div id="listingPrice">${spot.price} night</div>
+                  <p className="details">{spot.city + ", " + spot.state}</p>
+                  <p className="details"> ⭐ {spot.avgRating}</p>
+                  <p className="details"> ${spot.price} night</p>
                 </div>
               </div>
             </div>

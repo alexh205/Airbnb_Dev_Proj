@@ -1,60 +1,41 @@
-.profile-button--container {
-    display: flex;
-    padding-top: 5px;
-    flex-direction: column;
-    align-items: flex-end;
-  }
+/* Dropdown Button */
+.dropbtn {
+  background-color: #dadee1;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  justify-content: center;
+  width: 100%;
+}
 
-  .user-links--container {
-    display: flex;
-    flex-direction: column;
-  }
+.dropbtn:hover,
+.dropbtn:focus {
+  background-color: #7c8286;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  border: 1px solid black;
+  background-color: #dadee1;
+}
 
 
-  .user-links {
-    padding-top: 5px;
-  }
+.text {
+  color: rgb(46, 17, 152);
+  position: relative;
+  width:fit-content;
 
-  #user-nav-link {
-    color: #484848;
-    font-weight: 600;
-    text-decoration: none;
-  }
+}
 
-
-  .user-links--container:hover {
-    background-color: #c2bfbf;
-  }
-
-  .button-icon {
-    margin-right: 10px;
-  }
-
-  .profile--button {
-    border: none;
-    background-color: #d3d1d1;
-    width: 90px;
-    height: 40px;
-    border-radius: 25px;
-  }
-
-  .profile--button:hover {
-    background-color: #c2bfbf;
-  }
-
-  .guest-links {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .guest-links button{
-    margin-bottom: 4px;
-    width: 120px;
-    color: white;
-    background-color: black;
-  }
-
-  .menu{
-    cursor: pointer;
-  }
+#logout-button {
+  position: relative;
+  width: 120px;
+}
+.inner-components {
+  padding: 4px;
+  border: 1px solid black;
+}

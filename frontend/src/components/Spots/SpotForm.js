@@ -42,8 +42,6 @@ const SpotForm = () => {
       const data = await res.json();
       if (data && data.message) setErrors(data.errors);
     }
-
-
   };
 
   return (
@@ -60,9 +58,10 @@ const SpotForm = () => {
               required
               placeholder="Name"
             />
+            <p > {errors.name}</p>
           </label>
           <label>
-            Address
+            Address:
             <input
               type="text"
               value={address}

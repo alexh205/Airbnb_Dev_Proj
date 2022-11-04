@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory, NavLink, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
 import "./ProfileButton.css";
@@ -8,7 +8,7 @@ import ProfileImg from "../../images/profile.png";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
-  const history = useHistory();
+
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
@@ -72,52 +72,37 @@ function ProfileButton({ user }) {
     setShowMenu(false);
   };
 
-  const currUser = useSelector((state) => state.session);
-  let userInfo = currUser.user.user;
+  if (user)
+    return (
+      <>
+        <div className="dropdown" id="border-container">
+          <button onClick={openMenu} className="dropbtn" id="dropdown-content">
+            <img src={ProfileImg}></img>
+          </button>
+          {showMenu && (
+            <div className="profile-dropdown">
+              <div>
+                <label>
+                  Current User:
+                  <p className="text">{user.username}</p>
+                </label>
+              </div>
+              <div>
+                <div className="inner-components">{NewListing}</div>
+                <div className="inner-components">{Listings}</div>
+                <div className="inner-components">{Reviews}</div>
+              </div>
 
-  if (currUser && currUser.user) userInfo = currUser.user.user;
-  return (
-    <>
-      <div>
-        <button onClick={openMenu}>
-          <img src={ProfileImg} alt="profile-img" id="profile-toggle" />
-
-          <i className="fas fa-user-circle" />
-          <p>{userInfo?.username}</p>
-        </button>
-
-        {showMenu && (
-          <div className="profile-dropdown">
-            <div>
-              <label>
-                Username:
-                <b>
-                  <i> {userInfo?.username}</i>
-                </b>
-              </label>
+              <div>
+                <button onClick={logout} id="logout-button">
+                  Log Out
+                </button>
+              </div>
             </div>
-            <div>
-              <label>
-                Email:
-                <b>
-                  <i> {userInfo?.email}</i>
-                </b>
-              </label>
-            </div>
-            <div>
-              <div>{Listings}</div>
-              <div>{NewListing}</div>
-              <div>{Reviews}</div>
-            </div>
-
-            <div>
-              <button onClick={logout}>Log Out</button>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
-  );
+          )}
+        </div>
+      </>
+    );
 }
 
 export default ProfileButton;

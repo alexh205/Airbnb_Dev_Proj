@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormPage/SignupFormModal";
-import ProfileImg from "../../images/profile.png";
+import logo from "../../images/Airbnb-Logo.png";
+
 import "./Navigation.css";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-  const [isOpen, setIsOpen] = useState(false);
 
   let sessionLinks;
   if (sessionUser) {
-    sessionLinks = <ProfileButton user={sessionUser} />;
+    sessionLinks = (
+      <>
+        <div id="menu-container">
+          <div id="menu-toggle">
+            <ProfileButton user={sessionUser} />
+          </div>
+        </div>
+      </>
+    );
   } else {
     sessionLinks = (
       <>
-        <LoginFormModal />
-        <SignupFormModal />
+        <div>
+          <LoginFormModal />
+          <SignupFormModal />
+        </div>
       </>
     );
   }
@@ -26,27 +36,19 @@ function Navigation({ isLoaded }) {
   return (
     <>
       <div className="header">
-        <div className="header-left">
-          <Link to="/">
-            <img
-              src="https://hospitalitydesign.com/wp-content/uploads/Airbnb-logo.png"
-              alt="airbnb-logo"
-              id="logo-img"
-            />
+        <div>
+          <Link to="/" className="home-container">
+            <div id="img-container">
+              <img src={logo} alt="profile-img" id="logo-img" />
+            </div>
           </Link>
         </div>
-        <div className="collapsible">
-          <button className="toggle" onClick={() => setIsOpen(!isOpen)}>
-            <div className="toggle-container">
-              <img src={ProfileImg} alt="profile-img" id="menu-toggle" />{" "}
-            </div>
-          </button>
-          {isOpen &&
-            ((<div className="toggle">{isLoaded}</div>),
-            (<div className="toggle">{sessionLinks}</div>))}
+        <div className="header-right">
+          <div id="menu-container">
+            <div>{isLoaded && sessionLinks}</div>
+          </div>
         </div>
       </div>
-      <div className="bottom-footer"></div>
     </>
   );
 }

@@ -30,17 +30,17 @@ router.post("/", validateLogin, async (req, res, next) => {
     err.errors = ["The provided credentials were invalid."];
     return next(err);
   }
-
+  console.log(user.dataValues.id);
   //* Excluding undesired parameters
   const loginUser = await User.findOne({
-    where: { id: user.id },
+    where: { id: user.dataValues.id },
     attributes: { exclude: ["createdAt", "updatedAt", "hashedPassword"] },
   });
 
   loginUser.dataValues.token = await setTokenCookie(res, user);
-  const { firstName, lastName, username, email } = loginUser;
+  const { id, firstName, lastName, username, email } = loginUser.dataValues;
 
-  return res.json({ firstName, lastName, username, email });
+  return res.json({ id, firstName, lastName, username, email });
 });
 
 /**********************************************************************************/
@@ -56,10 +56,9 @@ router.delete("/", (_req, res) => {
 //! Restore session user
 router.get("/", restoreUser, (req, res) => {
   const { user } = req;
+
   if (user) {
-    return res.json({
-      user: user.toSafeObject(),
-    });
+    return res.json(user.dataValues);
   } else return res.json({});
 });
 

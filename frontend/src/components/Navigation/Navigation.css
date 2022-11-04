@@ -2,6 +2,19 @@
   display: flex;
   justify-content: left;
 }
+.menu-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 15px;
+  height: 8px;
+}
+
+#menu-toggle {
+  object-fit: cover;
+  height: 40%;
+  width: 40%;
+}
 #logo-img {
   height: 68px;
   cursor: pointer;
@@ -38,15 +51,10 @@
   padding-bottom: 10px;
 }
 
-.toggle-container {
+.img-container {
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
   width: 15px;
   height: 8px;
-}
-#menu-toggle {
-  object-fit: cover;
-  height: 100%;
-  width: 100%;
 }

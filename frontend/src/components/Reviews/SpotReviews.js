@@ -1,31 +1,46 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as reviewActions from "../../store/reviews";
-import { Link, useParams } from "react-router-dom";
-import EditReviews from "./EditReviews";
+import * as sessionActions from "../../store/session";
+import { Link } from "react-router-dom";
 
 const SpotReviews = ({ locationId }) => {
   const dispatch = useDispatch();
-  // const { spotId } = useParams();
 
   useEffect(() => {
+    // const allreviews = async () =>
+    //   await dispatch(reviewActions.getAllReviews(locationId));
+    // const currnUser = async () => await dispatch(sessionActions.restoreUser());
+
+    dispatch(sessionActions.restoreUser());
     dispatch(reviewActions.getAllReviews(locationId));
+
+    // allreviews();
+    // currnUser();
   }, [dispatch, locationId]);
+
+  // Selecting the State variables
   const reviewsObj = useSelector((state) => state.reviews);
   const reviews = Object.values(reviewsObj);
 
+  const userObj = useSelector((state) => state.session.user);
+
   let foundReviews;
-  if (reviews && locationId) {
+
+  if (reviews.length < 1)
+    return <p>No Reviews Found for This Listing. Login to Add a Review</p>;
+
+  if (reviews.length > 0) {
     foundReviews = (
       <div>
         <div id="my-reviews-container">
           <div id="userReviews" key="userreviews">
             {reviews &&
               reviews.map((review) => (
-                <div id="review" key={review.id}>
+                <div id="review" key={review?.id}>
                   <div>
                     <p>
-                      ⭐ {review.stars} Stars · {reviews.length} reviews
+                      ⭐ {review.stars} Stars 
                     </p>
                   </div>
                   <div>
@@ -39,25 +54,23 @@ const SpotReviews = ({ locationId }) => {
                   <div id="updated-at">
                     Updated on: {review.updatedAt.slice(0, 10)}
                   </div>
-
-                  <div id="edit-delete-container">
-                    <Link to={`/review-edit/${review.id}`}>
-                      <button>Edit</button>
-                    </Link>
-                  </div>
+                  {userObj && userObj.id === review.userId && (
+                    <>
+                      <div id="edit-container">
+                        <Link to={`/review-edit/${review?.id}`}>
+                          <button>Edit</button>
+                        </Link>
+                      </div>
+                    </>
+                  )}
                 </div>
               ))}
           </div>
         </div>
       </div>
     );
-  } else {
-    foundReviews = (
-      <>
-        <p>No Reviews Found for This Listing</p>
-      </>
-    );
   }
+
   if (reviews)
     return (
       <div>
