@@ -42,7 +42,7 @@ function App() {
           <Route path="/spot-edit/:spotId" component={EditSpotForm} />
         </Switch>
       )}
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

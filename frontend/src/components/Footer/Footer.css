@@ -1,9 +1,8 @@
 .footer_container {
-  position: relative;
-  /* flex-direction: row; */
-  
+  position: absolute;
   background-color: rgb(255, 255, 255);
   border-top: 0.5px solid grey;
+  max-height: 10px;
 
 }
 

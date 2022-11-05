@@ -1,49 +1,95 @@
+#spot-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
 #img-holder {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  grid-gap: 1px;
-  align-items: start;
-  justify-items: center;
-  margin: auto;
-  width: 504px;
-  /* grid-column: span 3;
+  display: flex;
+  justify-content: center;
 
-  grid-row: span 3; */
+  max-height: 59vh;
 }
 
-#img-holder img {
-  grid-column: span 3;
-
-  grid-row: span 3;
-}
-
-#previewImage-container {
-  width: 650px;
-  height: 400px;
-}
-
-#previewImage {
-  /* border-radius: 10px; */
-  max-width: 100%;
-}
-
-.img-container {
-  width: 350px;
-  height: 250px;
-}
-.spot-img {
-  max-width: 100%;
-}
-
-/* .spot-details-container {
-  line-height: 12px;
-} */
-
-#description {
-  line-height: 10px;
+#spot-name-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .inner-div {
-  display: grid;
-  grid-template-columns: 200px repeat(auto-fill, 100px);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.img-container {
+  width: 400px;
+  height: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+#description {
+  /* line-height: 10px; */
+
+  margin: 0px 20px 0px;
+  width: 150px;
+}
+
+#spot-name {
+  padding: 20px;
+}
+
+#previewImage-container {
+  position: relative;
+  right: 1vw;
+}
+
+#previewImage {
+  border: 1px solid black;
+  border-radius: 8px;
+
+  min-width: 600px;
+  max-width: 600px;
+
+  min-height: 410px;
+  max-height: 410px;
+
+  position: relative;
+}
+
+#smaller-imgs-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-evenly;
+  width: 22vw;
+  height: 40vh;
+  max-height: auto;
+  position: relative;
+  right: 1vw;
+  margin: 10px; */
+
+    border: 1px solid black;
+    border-radius: 8px;
+
+    min-width: 400px;
+    max-width: 400px;
+
+    min-height: 310px;
+    max-height: 310px;
+
+    /* position: relative; */
+
+  /* box-sizing: content-box; */
+}
+
+/* .img-container{
+  margin: 20px;
+} */
+.spot-img {
+  height: 20vh;
+  width: 30vw;
+  position: relative;
+  /* margin: 40px; */
+  /* margin-bottom: 10px; */
 }

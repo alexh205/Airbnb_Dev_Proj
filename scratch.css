@@ -1,0 +1,60 @@
+#spot-images-container {
+    display: flex;
+    justify-content: center;
+
+    max-height: 59vh;
+}
+
+#spot-images {
+    border: 1px solid black;
+    border-radius: 8px;
+
+    min-width: 300px;
+    max-width: 300px;
+
+    min-height: 250px;
+    max-height: 250px;
+
+    margin: 15px;
+}
+
+#main-spot-img {
+    border: 1px solid black;
+    border-radius: 8px;
+
+    min-width: 600px;
+    max-width: 600px;
+
+    min-height: 410px;
+    max-height: 410px;
+
+    position: relative;
+    right: 13vw;
+    bottom: 0.4vh;
+}
+
+#many-spot-images-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    box-sizing: content-box;
+
+    max-width: 50vw;
+
+    position: relative;
+    bottom: 58.4vh;
+    left: 11vw;
+}
+
+.many-spot-images {
+    border: 1px solid black;
+    border-radius: 8px;
+
+    min-width: 250px;
+    max-width: 250px;
+
+    min-height: 199.5px;
+    max-height: 199.5px;
+
+    margin: 5px;
+}

@@ -57,10 +57,10 @@ const SpotDetail = () => {
   if (spot)
     return (
       <>
-        <div>
-          <div></div>
-          <b></b>
-          <h2 id="spot-name">{spot.name}</h2>
+        <div className="spot-container">
+          <div id="spot-name-container">
+            <h2 id="spot-name">{spot.name}</h2>
+          </div>
           <div className="inner-div">
             <b>
               <p id="description">
@@ -77,15 +77,17 @@ const SpotDetail = () => {
             <div id="previewImage-container">
               <img id="previewImage" src={spot.previewImage} />
             </div>
-            {spot && spot.spotImages.length > 0 ? (
-              spot.spotImages.map((image, i) => (
-                <div className="img-container" key={i}>
-                  <img className="spot-img" src={image.url} alt={spot.name} />
-                </div>
-              ))
-            ) : (
-              <p>No Images Found</p>
-            )}
+            <div id="smaller-imgs-container">
+              {spot && spot.spotImages.length > 0 ? (
+                spot.spotImages.map((image, i) => (
+                  <div className="img-container" key={i}>
+                    <img className="spot-img" src={image.url} alt={spot.name} />
+                  </div>
+                ))
+              ) : (
+                <p>No Images Found</p>
+              )}
+            </div>
           </div>
           <div className="spot-details-container">
             <p id="description">{spot.description}</p>
@@ -94,25 +96,31 @@ const SpotDetail = () => {
             </h3>
           </div>
         </div>
-        {currentUser && spot.ownerId === currentUser.id && <div>{options}</div>}
-        <div className="userReviews-container">
-          {reviewsArr && reviewsArr.length > 0 ? (
-            <div id="reviews">
-              <SpotReviews locationId={spotId} />
-            </div>
-          ) : (
-            <p>No Reviews Found</p>
+        <div classNames="reviews-container">
+          {currentUser && spot.ownerId === currentUser.id && (
+            <div>{options}</div>
           )}
+          <div className="userReviews-container">
+            {reviewsArr && reviewsArr.length > 0 ? (
+              <div id="reviews">
+                <SpotReviews locationId={spotId} />
+              </div>
+            ) : (
+              <p>No Reviews Found</p>
+            )}
+          </div>
         </div>
-        {currentUser &&
-          currentUser !== null &&
-          currentUser.id !== spot.ownerId && (
-            <div>
-              <Link to={`/spots/${spotId}/reviews`}>
-                <button>Add a Review</button>
-              </Link>
-            </div>
-          )}
+        <div className="review-button">
+          {currentUser &&
+            currentUser !== null &&
+            currentUser.id !== spot.ownerId && (
+              <div>
+                <Link to={`/spots/${spotId}/reviews`}>
+                  <button>Add a Review</button>
+                </Link>
+              </div>
+            )}
+        </div>
       </>
     );
 };
