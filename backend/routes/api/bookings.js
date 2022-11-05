@@ -50,7 +50,6 @@ router.get("/current", requireAuth, async (req, res) => {
   for (let booking of userBookings) {
     let spotId = booking.dataValues.Spot.dataValues.id;
 
-    console.log(spotId);
 
     //* Images
     let previewImage = [];

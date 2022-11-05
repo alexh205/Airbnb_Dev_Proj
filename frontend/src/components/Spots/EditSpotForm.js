@@ -22,6 +22,8 @@ const EditSpotForm = () => {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
+  const [errors, setErrors] = useState([]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
 
   useEffect(() => {
     if (spotData) {
@@ -38,10 +40,73 @@ const EditSpotForm = () => {
     }
   }, [spotData]);
 
-  const [errors, setErrors] = useState([]);
+  useEffect(() => {
+    const errorArr = [];
+
+    if (address.length > 30 || address.length < 5)
+      errorArr.push(
+        "address must be greater than 4 and less than 30 characters long"
+      );
+    if (city.length > 20 || city.length < 4)
+      errorArr.push(
+        "city must be greater than 3 and less than 20 characters long"
+      );
+    if (state.length > 20 || state.length < 2)
+      errorArr.push(
+        "State must be greater than 1 and less than 20 characters long"
+      );
+    if (country.length > 25 || country.length < 3)
+      errorArr.push(
+        "Country must be greater than 2 and less than 25 characters long"
+      );
+    if (isNaN(lat)) errorArr.push("Lat must be a number");
+    if (isNaN(lng)) errorArr.push("Lng must be a number");
+    if (name.length > 40 || name.length < 4)
+      errorArr.push(
+        "Name must be greater than 3 and less than 40 characters long"
+      );
+    if (description.length > 200 || description.length < 4)
+      errorArr.push(
+        "Description must be greater than 3 and less than 200 characters long"
+      );
+    if (isNaN(price)) errorArr.push("Price must be a number");
+    if (previewImage.length > 250 || previewImage.length < 4)
+      errorArr.push(
+        "previewImage Url must be greater than 5 and less than 250 characters long"
+      );
+    setErrors(errorArr);
+  }, [
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    previewImage,
+  ]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    setHasSubmitted(true);
+    if (errors.length) return alert("Cannot Submit");
+
+    setAddress("");
+    setCity("");
+    setState("");
+    setCountry("");
+    setLat("");
+    setLng("");
+    setName("");
+    setDescription("");
+    setPrice("");
+    setPreviewImage("");
+    setErrors([]);
+    setHasSubmitted(false);
+
     let spot = {
       address,
       city,
@@ -71,9 +136,19 @@ const EditSpotForm = () => {
   if (spotData)
     return (
       <div>
+        <h2>Update {name}</h2>
+        {hasSubmitted && errors.length > 0 && (
+          <div>
+            The following errors were found:
+            <ul>
+              {errors.map((error) => (
+                <li key={error}>{error}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <form className="spots-app" onSubmit={onSubmit}>
           <div>
-            <h2>Update {name}</h2>
             <div>
               <label>
                 Name:

@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.delete("/:imageId", requireAuth, async (req, res) => {
   const currImage = await Image.findByPk(req.params.imageId);
-  console.log(currImage);
+
 
   if (!currImage) {
     return res

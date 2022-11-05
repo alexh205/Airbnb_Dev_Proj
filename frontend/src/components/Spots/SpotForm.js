@@ -23,17 +23,38 @@ const SpotForm = () => {
   useEffect(() => {
     const errorArr = [];
 
-    address && errorArr.push(),
-      city && errorArr.push(),
-      state && errorArr.push(),
-      country && errorArr.push(),
-      lat && errorArr.push(),
-      lng && errorArr.push(),
-      name && errorArr.push(),
-      description && errorArr.push(),
-      price && errorArr.push(),
-      previewImage && errorArr.push(),
-      setErrors(errorArr);
+    if (address.length > 30 || address.length < 5)
+      errorArr.push(
+        "address must be greater than 4 and less than 30 characters long"
+      );
+    if (city.length > 20 || city.length < 4)
+      errorArr.push(
+        "city must be greater than 3 and less than 20 characters long"
+      );
+    if (state.length > 20 || state.length < 2)
+      errorArr.push(
+        "State must be greater than 1 and less than 20 characters long"
+      );
+    if (country.length > 25 || country.length < 3)
+      errorArr.push(
+        "Country must be greater than 2 and less than 25 characters long"
+      );
+    if (isNaN(lat)) errorArr.push("Lat must be a number");
+    if (isNaN(lng)) errorArr.push("Lng must be a number");
+    if (name.length > 40 || name.length < 4)
+      errorArr.push(
+        "Name must be greater than 3 and less than 40 characters long"
+      );
+    if (description.length > 200 || description.length < 4)
+      errorArr.push(
+        "Description must be greater than 3 and less than 200 characters long"
+      );
+    if (isNaN(price)) errorArr.push("Price must be a number");
+    if (previewImage.length > 250 || previewImage.length < 4)
+      errorArr.push(
+        "previewImage Url must be greater than 5 and less than 250 characters long"
+      );
+    setErrors(errorArr);
   }, [
     address,
     city,
@@ -91,107 +112,131 @@ const SpotForm = () => {
 
   return (
     <div>
+      <h2>Create a New Spot</h2>
+      {hasSubmitted && errors.length > 0 && (
+        <div>
+          The following errors were found:
+          <ul>
+            {errors.map((error) => (
+              <li key={error}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <form className="spots-app" onSubmit={handleSubmit}>
         <div>
-          <h2>Create a New Spot</h2>
           <label>
             Name
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
+              // required
               placeholder="Name"
             />
             <p> {errors.name}</p>
           </label>
+        </div>
+        <div>
           <label>
             Address:
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              required
+              // required
               placeholder="Address"
             />
           </label>
+        </div>
+        <div>
           <label>
             City:
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              required
+              // required
               placeholder="City"
             />
           </label>
+        </div>
+        <div>
           <label>
             State:
             <input
               type="text"
               value={state}
               onChange={(e) => setState(e.target.value)}
-              required
+              // required
               placeholder="State"
             />
           </label>
+        </div>
+        <div>
           <label>
             Country:
             <input
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              required
+              // required
               placeholder="Country"
             />
           </label>
-          <label>
-            Latitude:
-            <input
-              type="text"
-              value={lat}
-              onChange={(e) => setLat(e.target.value)}
-              required
-              placeholder="Latitude"
-            />
-          </label>
-          <label>
-            Longitude:
-            <input
-              type="text"
-              value={lng}
-              onChange={(e) => setLng(e.target.value)}
-              required
-              placeholder="Longitude"
-            />
-          </label>
+        </div>
+        <label>
+          Latitude:
+          <input
+            type="text"
+            value={lat}
+            onChange={(e) => setLat(e.target.value)}
+            // required
+            placeholder="Latitude"
+          />
+        </label>
+        <label>
+          Longitude:
+          <input
+            type="text"
+            value={lng}
+            onChange={(e) => setLng(e.target.value)}
+            // required
+            placeholder="Longitude"
+          />
+        </label>
+        <div>
           <label>
             Description:
             <input
               type="textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              required
+              // required
               placeholder="Description"
             />
           </label>
+        </div>
+        <div>
           <label>
             Price:
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              required
+              // required
               placeholder="$ Price"
             />
           </label>
+        </div>
+        <div>
           <label>
             Preview Image:
             <input
               type="text"
               value={previewImage}
               onChange={(e) => setPreviewImage(e.target.value)}
-              required
+              // required
               placeholder="url"
             />
           </label>

@@ -49,7 +49,7 @@ export const signup = (user) => async (dispatch) => {
 //! Login
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
-  console.log(credential, password);
+
   const response = await csrfFetch("/api/session", {
     method: "POST",
     body: JSON.stringify({
@@ -57,7 +57,7 @@ export const login = (user) => async (dispatch) => {
       password,
     }),
   });
-  console.log(response);
+  
   if (response.ok) {
     let data = await response.json();
 
@@ -65,7 +65,7 @@ export const login = (user) => async (dispatch) => {
     return data;
   }
   let data = await response.json();
-  console.log(data);
+
   return response;
 };
 

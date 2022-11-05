@@ -21,7 +21,7 @@ router.post("/", validateLogin, async (req, res, next) => {
   const { credential, password } = req.body;
 
   const user = await User.login({ credential, password });
-  // console.log("backend created user:", user);
+
   //* User validation
   if (!user) {
     const err = new Error("Login failed");
@@ -30,7 +30,7 @@ router.post("/", validateLogin, async (req, res, next) => {
     err.errors = ["The provided credentials were invalid."];
     return next(err);
   }
-  console.log(user.dataValues.id);
+
   //* Excluding undesired parameters
   const loginUser = await User.findOne({
     where: { id: user.dataValues.id },
