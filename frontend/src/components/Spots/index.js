@@ -11,11 +11,10 @@ const SpotsPage = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   let spots;
-  let reLoad;
+
   useEffect(() => {
-    reLoad = async () => await dispatch(spotActions.getAllSpots());
-    reLoad();
-    dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(spotActions.getAllSpots());
+
     dispatch(reviewActions.renderReviews());
   }, [dispatch]);
 
@@ -27,7 +26,6 @@ const SpotsPage = () => {
       <>
         <div className="main-container">
           {spots.map((spot) => (
-
             <div key={spot.id} className="listings_item">
               <Link to={`/spots/${spot.id}`}>
                 {spot.previewImage && spot.previewImage !== null ? (
@@ -49,7 +47,6 @@ const SpotsPage = () => {
                     </p>
                   </Link>
                   <p className="details" id="rating-para">
-                    
                     ⭐ {spot.avgRating}
                   </p>
                 </div>
@@ -58,7 +55,6 @@ const SpotsPage = () => {
                 </p>
               </span>
             </div>
-
           ))}
         </div>
       </>

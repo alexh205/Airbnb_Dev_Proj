@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as spotActions from "../../store/spots";
@@ -18,9 +18,54 @@ const SpotForm = () => {
   const [price, setPrice] = useState("");
   const [previewImage, setPreviewImage] = useState("");
   const [errors, setErrors] = useState([]);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+
+  useEffect(() => {
+    const errorArr = [];
+
+    address && errorArr.push(),
+      city && errorArr.push(),
+      state && errorArr.push(),
+      country && errorArr.push(),
+      lat && errorArr.push(),
+      lng && errorArr.push(),
+      name && errorArr.push(),
+      description && errorArr.push(),
+      price && errorArr.push(),
+      previewImage && errorArr.push(),
+      setErrors(errorArr);
+  }, [
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    previewImage,
+  ]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setHasSubmitted(true);
+    if (errors.length) return alert("Cannot Submit");
+
+    setAddress("");
+    setCity("");
+    setState("");
+    setCountry("");
+    setLat("");
+    setLng("");
+    setName("");
+    setDescription("");
+    setPrice("");
+    setPreviewImage("");
+    setErrors([]);
+    setHasSubmitted(false);
+
     let spot = {
       address,
       city,
@@ -58,7 +103,7 @@ const SpotForm = () => {
               required
               placeholder="Name"
             />
-            <p > {errors.name}</p>
+            <p> {errors.name}</p>
           </label>
           <label>
             Address:

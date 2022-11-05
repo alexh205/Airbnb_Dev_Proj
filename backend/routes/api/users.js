@@ -56,7 +56,7 @@ router.post("/", validateSignup, async (req, res) => {
     where: { id: user.id },
     attributes: { exclude: ["createdAt", "updatedAt", "hashedPassword"] },
   });
-  newUser.dataValues.token = "";
+  // newUser.dataValues.token = "";
 
   return res.json(newUser);
 });

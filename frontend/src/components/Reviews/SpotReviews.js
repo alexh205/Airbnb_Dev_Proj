@@ -37,8 +37,8 @@ const SpotReviews = ({ locationId }) => {
                   </div>
                   <div>
                     <p>
-
-                      {review.User.firstName} {review.User.lastName}
+                      {review.User && review.User.firstName} {''}
+                      {review.User && review.User.lastName}
                     </p>
                   </div>
                   <div>

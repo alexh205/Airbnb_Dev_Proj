@@ -69,14 +69,16 @@ export const login = (user) => async (dispatch) => {
   return response;
 };
 
+//! Logout
 export const logout = () => async (dispatch) => {
   const response = await csrfFetch("/api/session", {
     method: "DELETE",
   });
   if (response.ok) {
     dispatch(removeUser());
-    return response;
+
   }
+  return response;
 };
 
 const initialState = { user: null };
@@ -91,6 +93,7 @@ const sessionReducer = (state = initialState, action) => {
         newState.user = action.user;
       }
       return newState;
+
     case REMOVE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
