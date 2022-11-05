@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
 import "./ProfileButton.css";
@@ -8,16 +8,9 @@ import ProfileImg from "../../images/profile.png";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [showMenu, setShowMenu] = useState(false);
-
-  useEffect(() => {
-    const sessionUser = async () => {
-      await dispatch(sessionActions.restoreUser());
-
-      sessionUser();
-    };
-  }, [dispatch]);
 
   const openMenu = () => {
     if (showMenu) return;
@@ -69,7 +62,8 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-    setShowMenu(false);
+
+    // setShowMenu(false);
   };
 
   if (user)
@@ -94,7 +88,13 @@ function ProfileButton({ user }) {
               </div>
 
               <div>
-                <button onClick={logout} id="logout-button">
+                <button
+                  onClick={(e) => {
+                    logout(e);
+                    history.push("/");
+                  }}
+                  id="logout-button"
+                >
                   Log Out
                 </button>
               </div>

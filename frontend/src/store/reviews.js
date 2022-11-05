@@ -68,23 +68,10 @@ export const addNewReview = (data) => async (dispatch) => {
   if (response.ok) {
     const newReview = await response.json();
     dispatch(addReview(newReview));
+  } else {
+    return response;
   }
 };
-
-// export const createReviewImage =
-//   (url, reviewId, userId) => async (dispatch) => {
-//     const response = await csrfFetch(`/api/reviews/${reviewId}/images`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ url, userId }),
-//     });
-
-//     if (response.ok) {
-//       const newReview = await response.json();
-
-//       dispatch(addReviewImages(newReview));
-//     }
-//   };
 
 export const getUserReviews = () => async (dispatch) => {
   const response = await csrfFetch("/api/reviews/current");

@@ -78,6 +78,42 @@ module.exports = {
           userId: 1,
         },
         {
+          imageableId: 5,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-633907917135849973/original/6df42c9a-8258-4ebf-9a2f-fa6ebb99acfe.jpeg?im_w=1440",
+          userId: 3,
+        },
+        {
+          imageableId: 5,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-633907917135849973/original/34a5ca4f-51cf-4e0b-8338-90b1f3a2b4b0.jpeg?im_w=1440",
+          userId: 3,
+        },
+        {
+          imageableId: 5,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-633907917135849973/original/0635a068-30d6-4825-b30b-0804e31d417c.jpeg?im_w=1440",
+          userId: 3,
+        },
+        {
+          imageableId: 6,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-633907917135849973/original/0635a068-30d6-4825-b30b-0804e31d417c.jpeg?im_w=1440",
+          userId: 2,
+        },
+        {
+          imageableId: 6,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/56c4d317-d952-4340-8ed6-2446a4869db9.jpg?im_w=720",
+          userId: 2,
+        },
+        {
+          imageableId: 6,
+          imageableType: "Spot",
+          url: "https://a0.muscache.com/im/pictures/722a0216-7f88-474e-a0de-8b8aa24d2331.jpg?im_w=720",
+          userId: 2,
+        },
+        {
           imageableId: 1,
           imageableType: "User",
           url: "https://images.unsplash.com/photo-1614502875832-77fe801288ba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=970&q=80",

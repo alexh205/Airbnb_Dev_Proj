@@ -8,15 +8,9 @@ const SpotReviews = ({ locationId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // const allreviews = async () =>
-    //   await dispatch(reviewActions.getAllReviews(locationId));
-    // const currnUser = async () => await dispatch(sessionActions.restoreUser());
-
+    // dispatch(reviewActions.renderReviews());
     dispatch(sessionActions.restoreUser());
     dispatch(reviewActions.getAllReviews(locationId));
-
-    // allreviews();
-    // currnUser();
   }, [dispatch, locationId]);
 
   // Selecting the State variables
@@ -34,17 +28,16 @@ const SpotReviews = ({ locationId }) => {
     foundReviews = (
       <div>
         <div id="my-reviews-container">
-          <div id="userReviews" key="userreviews">
+          <div id="userReviews">
             {reviews &&
               reviews.map((review) => (
-                <div id="review" key={review?.id}>
+                <div id="review" key={review.id}>
                   <div>
-                    <p>
-                      ⭐ {review.stars} Stars 
-                    </p>
+                    <p>⭐ {review.stars} Stars</p>
                   </div>
                   <div>
                     <p>
+
                       {review.User.firstName} {review.User.lastName}
                     </p>
                   </div>

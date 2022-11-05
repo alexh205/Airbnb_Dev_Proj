@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 import * as reviewActions from "../../store/reviews";
 import * as spotActions from "../../store/spots";
 import SpotReviews from "../Reviews/SpotReviews";
@@ -16,21 +15,12 @@ const SpotDetail = () => {
   const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    // const spotsArr = async () => await dispatch(spotActions.getAllSpots());
-    // const myReviews = async () =>
-    //   await dispatch(reviewActions.getAllReviews(spotId));
-    // const render = async () => dispatch(reviewActions.renderReviews());
-
     dispatch(reviewActions.renderReviews());
     dispatch(reviewActions.getAllReviews(spotId));
-
-    // spotsArr();
-    // render();
-    // myReviews();
   }, [dispatch]);
 
   let spot = useSelector((state) => state.spots[spotId]);
-  // console.log(spot);
+
   let currentUser = useSelector((state) => state.session.user);
 
   const reviewList = useSelector((state) => state.reviews);
@@ -49,15 +39,10 @@ const SpotDetail = () => {
           <button
             onClick={(e) => {
               e.preventDefault();
-              try {
-                dispatch(spotActions.deleteSpotById(spotId));
-                history.push("/");
-                // dispatch(spotActions.getAllSpots());
-              } catch (res) {
-                setErrors([]);
-                const data = res.json();
-                if (data && data.message) setErrors(data.errors);
-              }
+
+              dispatch(spotActions.deleteSpotById(spotId));
+              history.push("/");
+              dispatch(spotActions.getAllSpots());
             }}
           >
             Delete Listing
@@ -67,53 +52,58 @@ const SpotDetail = () => {
     );
   }
 
+  if (!spot) return <p>...No Listing Found!</p>;
+
   if (spot)
     return (
       <>
         <div>
-
-          <div>
-            <h2 id="spot-name">{spot?.name}</h2>
+          <div></div>
+          <b></b>
+          <h2 id="spot-name">{spot.name}</h2>
+          <div className="inner-div">
+            <b>
+              <p id="description">
+                ⭐ {spot.avgRating} · {reviewsArr.length} reviews
+              </p>
+            </b>
+            <b>
+              <p id="description">
+                {spot.city}, {spot.state}, {spot.country}
+              </p>
+            </b>
           </div>
           <div id="img-holder">
             <div id="previewImage-container">
               <img id="previewImage" src={spot.previewImage} />
             </div>
-            <div className="spotImages-div">
-              {spot && spot.spotImages.length > 0 ? (
-                spot.spotImages.map((image, i) => (
-                  <div className="img-container" key={i}>
-                    <img
-                      className="spot-img"
-                      src={image?.url}
-                      alt={spot?.name}
-                    />
-                  </div>
-                ))
-              ) : (
-                <p>No Images Found</p>
-              )}
-            </div>
+            {spot && spot.spotImages.length > 0 ? (
+              spot.spotImages.map((image, i) => (
+                <div className="img-container" key={i}>
+                  <img className="spot-img" src={image.url} alt={spot.name} />
+                </div>
+              ))
+            ) : (
+              <p>No Images Found</p>
+            )}
           </div>
-          <div>{spot.address}</div>
-          <div>
-            ⭐ {spot.avgRating} · {reviewsArr.length} reviews</div>
-
-          <div>
-            {spot.city}, {spot.state}
+          <div className="spot-details-container">
+            <p id="description">{spot.description}</p>
+            <h3 id="description">
+              <b>${spot.price}</b> night
+            </h3>
           </div>
-          <div id="description">{spot.description}</div>
-          <div>${spot.price} per night</div>
         </div>
-        {currentUser && spot?.ownerId === currentUser?.id && (
-          <div>{options}</div>
-        )}
-
-        {reviewsArr.length > 0 && (
-          <div id="reviews">
-            <SpotReviews locationId={spotId} />
-          </div>
-        )}
+        {currentUser && spot.ownerId === currentUser.id && <div>{options}</div>}
+        <div className="userReviews-container">
+          {reviewsArr && reviewsArr.length > 0 ? (
+            <div id="reviews">
+              <SpotReviews locationId={spotId} />
+            </div>
+          ) : (
+            <p>No Reviews Found</p>
+          )}
+        </div>
         {currentUser &&
           currentUser !== null &&
           currentUser.id !== spot.ownerId && (

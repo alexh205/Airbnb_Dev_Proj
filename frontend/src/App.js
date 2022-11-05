@@ -23,6 +23,7 @@ function App() {
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
     dispatch(spotActions.getAllSpots());
+    dispatch(reviewActions.renderReviews());
   }, [dispatch]);
 
   return (

@@ -64,6 +64,35 @@ module.exports = {
           previewImage:
             "https://a0.muscache.com/im/pictures/3d5e4135-3a07-40b0-ad93-b6e7d19b1ef7.jpg?im_w=1200",
         },
+        {
+          ownerId: 3,
+          address: "12 Broad Street",
+          city: "Mineral",
+          state: "VA",
+          country: "USA",
+          lat: 43.26,
+          lng: -134.34,
+          name: "Luxury Lakefront",
+          description:
+            "Lake view, Waterfront,Kitchen, Wifi,Dedicated workspace,Free parking on premises,HDTV with Netflix,Free washer – In building,Free dryer – In building,Security cameras on property",
+          price: 400,
+          previewImage:
+            "https://a0.muscache.com/im/pictures/prohost-api/Hosting-633907917135849973/original/a340cb79-ea06-4325-959b-e4bc9f15bf46.jpeg?im_w=1200",
+        },
+        {
+          ownerId: 2,
+          address: "3434 Sun Blvd",
+          city: "Hilton Head Island",
+          state: "SC",
+          country: "USA",
+          lat: 43.26,
+          lng: -134.34,
+          name: "Casa Beleza",
+          description: "kitchen, Wifi, Dryer, Air conditioning, Heater",
+          price: 820,
+          previewImage:
+            "https://a0.muscache.com/im/pictures/3437e550-3c9a-4400-b04c-6a5a3b534040.jpg?im_w=720",
+        },
       ],
       {}
     );

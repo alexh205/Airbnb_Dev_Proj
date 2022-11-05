@@ -438,7 +438,7 @@ router.post(
   requireAuth,
   reviewValidation,
   async (req, res) => {
-    const spot = await Spot.findByPk(req.params.spotId);
+    const spot = await Spot.findByPk(req.body.spotId);
 
     if (!spot) {
       return res.status(404).json({
@@ -448,7 +448,7 @@ router.post(
     }
 
     const spotReviews = await Review.findAll({
-      where: { spotId: req.params.spotId },
+      where: { spotId: req.body.spotId },
     });
 
     for (let spotReview of spotReviews) {

@@ -8,7 +8,6 @@ const EditReviews = () => {
   const { reviewId } = useParams();
   const history = useHistory();
 
-
   useEffect(() => {
     dispatch(reviewActions.getUserReviews());
   }, [dispatch]);
@@ -25,22 +24,23 @@ const EditReviews = () => {
     }
   }, [reviewEdit]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     let reviewData = {
       id: reviewId,
       review,
       stars,
     };
-    await dispatch(reviewActions.reviewEdit(reviewData));
+    dispatch(reviewActions.reviewEdit(reviewData));
 
     history.push(`/reviews/user`);
   };
-  const onClick = async (e) => {
+  const onClick = (e) => {
     e.preventDefault();
 
-    // await dispatch(reviewDelete(reviewId));
-    history.push(`/reviews/`);
+    dispatch(reviewActions.reviewDelete(reviewId));
+    dispatch(reviewActions.renderReviews());
+    history.push(`/`);
   };
 
   return (

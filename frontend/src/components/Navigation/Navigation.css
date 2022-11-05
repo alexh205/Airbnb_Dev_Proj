@@ -39,6 +39,18 @@
   justify-content: flex-end;
 }
 
+.modal-container{
+ display: flex;
+ align-items: center;
+ justify-content: space-around;
+ border: 3px double rgb(74, 61, 168);
+}
+
+.modal-inner-div{
+  padding: 4px;
+
+}
+
 .login {
   align-items: center;
 }

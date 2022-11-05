@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as spotActions from "../../store/spots";
 import * as sessionActions from "../../store/session";
+import * as reviewActions from "../../store/reviews";
 import "./Spots.css";
 
 const SpotsPage = () => {
@@ -15,6 +16,7 @@ const SpotsPage = () => {
     reLoad = async () => await dispatch(spotActions.getAllSpots());
     reLoad();
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
+    dispatch(reviewActions.renderReviews());
   }, [dispatch]);
 
   const spotsList = useSelector((state) => state.spots);
@@ -23,43 +25,40 @@ const SpotsPage = () => {
   if (spots)
     return (
       <>
-        <div id="main-container">
+        <div className="main-container">
           {spots.map((spot) => (
-            <div key={spot.id} className="listings">
-              <div className="listings_item">
-                <div
-                  className="listings_image"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Link to={`/spots/${spot.id}`}>
-                    {spot.previewImage && spot.previewImage !== null ? (
-                      <img
-                        id="images"
-                        src={spot.previewImage}
-                        alt={spot.name}
-                      />
-                    ) : (
-                      <p>
-                        <b>No Image Available</b>
-                      </p>
-                    )}
+
+            <div key={spot.id} className="listings_item">
+              <Link to={`/spots/${spot.id}`}>
+                {spot.previewImage && spot.previewImage !== null ? (
+                  <img id="images" src={spot.previewImage} alt={spot.name} />
+                ) : (
+                  <p>
+                    <b>No Image Available</b>
+                  </p>
+                )}
+              </Link>
+              <span>
+                <div className="inner-div">
+                  <Link
+                    to={`/spots/${spot.id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <p className="details" id="address-para">
+                      {spot.city + ", " + spot.state + ", " + spot.country}
+                    </p>
                   </Link>
+                  <p className="details" id="rating-para">
+                    
+                    ⭐ {spot.avgRating}
+                  </p>
                 </div>
-                <div
-                  className="listings_content"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Link to={`/spots/${spot.id}`}>
-                    <p className="details">{spot.name}</p>
-                  </Link>
-                </div>
-                <div>
-                  <p className="details">{spot.city + ", " + spot.state}</p>
-                  <p className="details"> ⭐ {spot.avgRating}</p>
-                  <p className="details"> ${spot.price} night</p>
-                </div>
-              </div>
+                <p className="details" id="price">
+                  <b>${spot.price}</b> night
+                </p>
+              </span>
             </div>
+
           ))}
         </div>
       </>
