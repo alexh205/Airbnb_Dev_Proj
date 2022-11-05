@@ -2,6 +2,9 @@
   "name": "airbnb_proj",
   "version": "1.0.0",
   "description": "## Database Schema Design",
+  "engines": {
+    "node": "16.18.0"
+  },
   "main": "index.js",
   "scripts": {
     "heroku-postbuild": "npm run build --prefix frontend",
