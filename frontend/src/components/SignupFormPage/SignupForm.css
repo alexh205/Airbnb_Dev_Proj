@@ -1,7 +1,7 @@
 .signUp-container {
   align-items: center;
   justify-content: space-between;
-  background-color: rgb(240, 245, 245);
+  background-color: rgb(187, 230, 230);
 }
 
 .signUp-button {
@@ -15,7 +15,7 @@
 }
 
 .signUp-form {
-  color: rgb(255, 255, 255);
+  color: rgb(150, 146, 146);
   background-color: black;
   border-radius: 25px;
   width: 300px;
@@ -44,7 +44,7 @@
   }
 
   .signUp-form {
-    color: rgb(255, 255, 255);
+    color: rgb(149, 146, 146);
     border-radius: 25px;
     background-color: black;
     height: 550px;
@@ -56,7 +56,7 @@
   }
 
   .label-fields {
-    color: rgb(255, 255, 255);
+    color: rgb(22, 6, 78);
     margin-top: 5px;
     font-size: 24px;
   }
@@ -68,6 +68,7 @@
 }
 input {
   padding-left: 30px;
+  color: black;
 }
 
 .signUp_div {
