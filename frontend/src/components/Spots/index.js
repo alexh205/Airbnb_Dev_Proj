@@ -24,24 +24,26 @@ const SpotsPage = () => {
   if (spots)
     return (
       <>
-        <div className="main-container">
-          {spots.map((spot) => (
-            <div key={spot.id} className="listings_item">
-              <Link to={`/spots/${spot.id}`}>
-                {spot.previewImage && spot.previewImage !== null ? (
-                  <img id="images" src={spot.previewImage} alt={spot.name} />
-                ) : (
-                  <p>
-                    <b>No Image Available</b>
-                  </p>
-                )}
-              </Link>
-              <span>
-                <div className="inner-div">
-                  <Link
-                    to={`/spots/${spot.id}`}
-                    style={{ textDecoration: "none" }}
-                  >
+        <div className="wrapper">
+          <div className="content">
+            {spots.map((spot) => (
+              <div key={spot.id} className="panel">
+                <Link to={`/spots/${spot.id}`}>
+                  {spot.previewImage && spot.previewImage !== null ? (
+                    <img
+                      className="panel-img"
+                      src={spot.previewImage}
+                      alt={spot.name}
+                    />
+                  ) : (
+                    <p>
+                      <b>No Image Available</b>
+                    </p>
+                  )}
+                </Link>
+                <span className="panel-title">
+                  <Link to={`/spots/${spot.id}`}
+                    style={{ textDecoration: "none" }}>
                     <p className="details" id="address-para">
                       {spot.city + ", " + spot.state + ", " + spot.country}
                     </p>
@@ -49,13 +51,13 @@ const SpotsPage = () => {
                   <p className="details" id="rating-para">
                     ⭐ {spot.avgRating}
                   </p>
-                </div>
-                <p className="details" id="price">
-                  <b>${spot.price}</b> night
-                </p>
-              </span>
-            </div>
-          ))}
+                  <p className="details" id="price">
+                    ${spot.price} night
+                  </p>
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </>
     );

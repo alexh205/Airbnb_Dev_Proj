@@ -12,7 +12,6 @@ const SpotDetail = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
     dispatch(reviewActions.renderReviews());

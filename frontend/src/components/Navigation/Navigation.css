@@ -48,9 +48,14 @@
 
 .modal-inner-div{
   padding: 4px;
-
 }
 
+
+.modal-inner-div > button{
+  background-color: rgb(208, 46, 31);
+  color: white;
+  font-weight: bold;
+}
 .login {
   align-items: center;
 }

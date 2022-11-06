@@ -1,41 +1,43 @@
 import React, { useState } from "react";
 import * as sessionActions from "../../store/session";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import "./LoginForm.css";
-import { useHistory } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 function LoginForm() {
   const dispatch = useDispatch();
+  const sessionUser = useSelector((state) => state.session.user);
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState([]);
-  const history = useHistory();
 
-  //! spot detail user login-in error message,
+  if (sessionUser) return <Redirect to="/" />;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
     return dispatch(sessionActions.login({ credential, password })).catch(
       async (res) => {
-
         const data = await res.json();
-        
-        history.push("/userSpots");
         if (data && data.errors) setErrors(data.errors);
       }
     );
   };
 
   return (
-    <div>
+    <div className="login-container">
       <form onSubmit={handleSubmit}>
         <ul>
-          {errors.map((error, idx) => (
-            <li key={idx}>{error}</li>
+          {errors.map((error, i) => (
+            <li key={i}>{error}</li>
           ))}
         </ul>
-        <label>
+        <b>
+          <i>
+            <div id="login-header">Login</div>
+          </i>
+        </b>
+        <label className="login-label-fields">
           Username or Email
           <input
             type="text"
@@ -44,7 +46,7 @@ function LoginForm() {
             required
           />
         </label>
-        <label>
+        <label className="login-label-fields">
           Password
           <input
             type="password"
