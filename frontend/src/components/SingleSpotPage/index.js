@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link, useHistory } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import * as reviewActions from "../../store/reviews";
 import * as spotActions from "../../store/spots";
 import SpotReviews from "../Reviews/SpotReviews";
@@ -17,7 +17,7 @@ const SpotDetail = () => {
   useEffect(() => {
     dispatch(reviewActions.renderReviews());
     dispatch(reviewActions.getAllReviews(spotId));
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   let spot = useSelector((state) => state.spots[spotId]);
 
