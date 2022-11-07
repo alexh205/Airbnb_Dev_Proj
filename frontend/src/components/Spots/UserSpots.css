@@ -72,19 +72,21 @@
 }
 
 #img-preview{
-  width: 400px;
-  height: 300px;
+
+  width: 240px;
+  height: 160px;
   border: 2px dotted black;
   margin-top: 8px;
 }
 
 #img-item{
-  width: 395px;
-  height: 295px;
+  width: 236px;
+  height: 160px;
 
 }
 
 .form-padding{
+
   padding: 4px;
   display: block;
 }

@@ -139,7 +139,7 @@ const EditSpotForm = () => {
       <div className="edit-spot-container">
         <h2
           style={{
-            display: "flex",
+
             justifyContent: "center",
             borderBottom: "1px solid black",
             paddingBottom: "5px",
@@ -282,7 +282,8 @@ const EditSpotForm = () => {
                 backgroundColor: "rgb(208, 46, 31)",
                 color: "white",
                 fontWeight: "bold",
-                padding: "4px",
+                padding: "2px",
+                paddingBottom: '6px',
                 width: "80px",
               }}
             />
