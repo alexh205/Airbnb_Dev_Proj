@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import * as spotActions from "../../store/spots";
+import "./UserSpots.css";
 
 const EditSpotForm = () => {
   const { spotId } = useParams();
@@ -124,7 +125,7 @@ const EditSpotForm = () => {
 
     try {
       await dispatch(spotActions.modifySpot(spotData));
-
+      await dispatch(spotActions.getAllSpots());
       history.push(`/spots/${spotData.id}`);
     } catch (res) {
       setErrors([]);
@@ -135,8 +136,18 @@ const EditSpotForm = () => {
 
   if (spotData)
     return (
-      <div>
-        <h2>Update {name}</h2>
+      <div className="edit-spot-container">
+        <h2
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            borderBottom: "1px solid black",
+            paddingBottom: "5px",
+          }}
+        >
+          Edit Listing:{" "}
+          <i style={{ color: "green", fontWeight: "bold" }}>'{name}'</i>
+        </h2>
         {hasSubmitted && errors.length > 0 && (
           <div>
             The following errors were found:
@@ -148,115 +159,133 @@ const EditSpotForm = () => {
           </div>
         )}
         <form className="spots-app" onSubmit={onSubmit}>
-          <div>
-            <div>
-              <label>
-                Name:
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Address:
-                <input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                City:
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                State:
-                <input
-                  type="text"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Country:
-                <input
-                  type="text"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Latitude:
-                <input
-                  type="text"
-                  value={lat}
-                  onChange={(e) => setLat(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Longitude:
-                <input
-                  type="text"
-                  value={lng}
-                  onChange={(e) => setLng(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Description:
-                <textarea
-                  type="textarea"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Price ($):
-                <input
-                  type="text"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Preview Image:
-                <input
-                  type="text"
-                  value={previewImage}
-                  onChange={(e) => setPreviewImage(e.target.value)}
-                />
-              </label>
-              <div id="img-preview">
-                {previewImage && previewImage.length > 0 && (
-                  <img src={previewImage} />
-                )}
-              </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Name:
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Address:
+              <input
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              City:
+              <input
+                type="text"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              State:
+              <input
+                type="text"
+                value={state}
+                onChange={(e) => setState(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Country:
+              <input
+                type="text"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Latitude:
+              <input
+                type="text"
+                value={lat}
+                onChange={(e) => setLat(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Longitude:
+              <input
+                type="text"
+                value={lng}
+                onChange={(e) => setLng(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Description:
+              <textarea
+                type="textarea"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Price ($):
+              <input
+                type="text"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+              />
+            </label>
+          </div>
+          <div className="form-padding">
+            <label className="padding-label">
+              Preview Image:
+              <input
+                type="text"
+                value={previewImage}
+                onChange={(e) => setPreviewImage(e.target.value)}
+                required
+              />
+            </label>
+            <div id="img-preview">
+              {previewImage && previewImage.length > 0 && (
+                <img id="img-item" src={previewImage} />
+              )}
             </div>
           </div>
+
           <div>
-            <input type="submit" />
+            <input
+              type="submit"
+              style={{
+                backgroundColor: "rgb(208, 46, 31)",
+                color: "white",
+                fontWeight: "bold",
+                padding: "4px",
+                width: "80px",
+              }}
+            />
           </div>
         </form>
       </div>

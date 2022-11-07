@@ -1,0 +1,65 @@
+.wrapper {
+  margin-left: 200px;
+  margin-right: 200px;
+  padding: 10px;
+
+}
+
+.myReviews-container {
+  border: 2px double black;
+  padding: 3px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  max-width: 60vw;
+  max-height: 60vh;
+  margin-right: 80px;
+  margin-left: 110px
+}
+
+.myReviews-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+
+}
+
+.button-reviews {
+  height: 35px;
+  background-color: rgb(208, 46, 31);
+  color: white;
+  font-weight: bold;
+}
+
+.review-spots {
+  border: 2px dotted black;
+  padding: 10px;
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+}
+
+.review-items {
+  display: inline-box;
+  border: 1px dotted black;
+  padding: 0px 3px 3px 3px;
+}
+
+.review-submit-button{
+  height: 28px;
+  background-color: rgb(208, 46, 31);
+  color: white;
+  font-weight: bold;
+  padding: 6px
+}
+
+
+.padding-label{
+  color: blue;
+  /* padding-right: 4px; */
+  }
+
+  .edit-spot-form{
+    margin-left: 400px;
+  }

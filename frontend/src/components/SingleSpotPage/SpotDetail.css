@@ -1,0 +1,124 @@
+.spot-container {
+  display: flex;
+  justify-content: flex-start;
+
+  border-bottom: 2px solid rgb(220, 220, 220);
+  margin-left: 200px;
+  margin-right: 200px;
+  /* max-height: 1200px; */
+}
+
+#spot-list {
+  list-style: none;
+  line-height: 35px;
+}
+.spotTitle-container {
+  display: flex;
+
+  margin-left: 10px;
+  margin-right: 10px;
+  border-bottom: 1px double black;
+}
+
+.reviewStar {
+  margin-left: 200px;
+}
+.location {
+  margin-left: 200px;
+}
+.price {
+  margin-left: 200px;
+  color: purple;
+  font-weight: bold;
+  font-size: 19px
+}
+
+.spotName {
+  font-size: 27px;
+}
+.userEdit-button{
+  display : flex;
+
+}
+
+#groupSpot-images-container {
+  display: flex;
+  justify-content: center;
+
+  max-height: 59vh;
+}
+
+.spot-reviews {
+  display: flex;
+
+  justify-content: flex-start;
+  margin-left: 200px;
+  margin-right: 200px;
+  border: 2px double grey;
+  padding: 10px;
+  max-width: 50vw;
+  max-height: 60vh;
+}
+
+#spot-images {
+  border: 1px solid black;
+  border-radius: 8px;
+
+  min-width: 300px;
+  max-width: 300px;
+
+  min-height: 250px;
+  max-height: 250px;
+
+  margin: 15px;
+}
+
+#main-spot-img {
+  border: 1px solid black;
+  border-radius: 8px;
+
+  min-width: 600px;
+  max-width: 600px;
+
+  min-height: 410px;
+  max-height: 410px;
+
+  position: relative;
+  right: 13vw;
+  bottom: 0.4vh;
+}
+
+#groupSpot-images-container {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  box-sizing: content-box;
+
+  max-width: 50vw;
+
+  position: relative;
+  bottom: 58.4vh;
+  left: 11vw;
+}
+
+.groupSpot-images {
+  border: 1px solid black;
+  border-radius: 4px;
+
+  min-width: 250px;
+  max-width: 250px;
+
+  min-height: 199.5px;
+  max-height: 199.5px;
+
+  margin: 5px;
+}
+
+.review-button {
+  margin-left: 200px;
+  margin-right: 200px;
+}
+
+.owner-button{
+  margin-left: 60px;
+}

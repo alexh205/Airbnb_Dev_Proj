@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import * as reviewActions from "../../store/reviews";
 import * as sessionActions from "../../store/session";
+import "./UserReviews.css";
 
 const ReviewForm = () => {
   const dispatch = useDispatch();
@@ -51,9 +52,9 @@ const ReviewForm = () => {
 
     try {
       dispatch(reviewActions.addNewReview(reviewData));
-      dispatch(reviewActions.renderReviews());
 
-      history.push(`/spots/${spotId}`);
+      history.push(`/`);
+      dispatch(reviewActions.renderReviews());
     } catch (res) {
       const data = res.json();
 
@@ -63,9 +64,22 @@ const ReviewForm = () => {
   };
 
   return (
-    <div id="review-form-container">
-      <div id="form-container">
-        <h2>Add a Review</h2>
+    <div
+      id="review-form-container"
+      style={{
+        "margin-left": "200px",
+        "margin-right": "200px",
+      }}
+    >
+      <div
+        id="form-container"
+        style={{
+          marginLeft: "23vw",
+          paddingBottom: "3px",
+          color: "green",
+        }}
+      >
+        <h2>Add a New Review</h2>
         {hasSubmitted && errors.length > 0 && (
           <div>
             The following errors were found:
@@ -77,27 +91,37 @@ const ReviewForm = () => {
           </div>
         )}
         <form onSubmit={handleSubmit}>
-          <label>
-            Review
-            <textarea
-              value={review}
-              onChange={(e) => setReview(e.target.value)}
-              // required
-            />
-          </label>
-          <label>
-            Stars
-            <input
-              type="number"
-              value={stars}
-              onChange={(e) => setStars(e.target.value)}
-              max="5"
-              min="1"
-              // required
-            />
-          </label>
+          <div>
+            <label className="padding-label">
+              Review :
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                required
+                placeholder="Review"
+              />
+            </label>
+          </div>
+          <div>
+            <label className="padding-label">
+              Stars :
+              <input
+                type="number"
+                value={stars}
+                onChange={(e) => setStars(e.target.value)}
+                max="5"
+                min="1"
+                required
+                placeholder="#"
+              />
+            </label>
+          </div>
 
-          <input type="submit" />
+          <input
+            type="submit"
+            className="review-submit-button"
+            style={{ marginTop: "6px", marginLeft: "30px" }}
+          />
         </form>
       </div>
     </div>

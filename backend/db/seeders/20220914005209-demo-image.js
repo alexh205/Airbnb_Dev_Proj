@@ -203,18 +203,7 @@ module.exports = {
           url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-13079799/original/4f46d389-3043-4252-ae63-0e79025e8c8b.jpeg?im_w=1440",
           userId: 3,
         },
-        {
-          imageableId: 10,
-          imageableType: "Spot",
-          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-13079799/original/671f9601-9c64-4ca7-9a3d-2ea7c61c132b.jpeg?im_w=1440",
-          userId: 3,
-        },
-        {
-          imageableId: 10,
-          imageableType: "Spot",
-          url: "https://a0.muscache.com/im/pictures/prohost-api/Hosting-13079799/original/f9010903-e50e-42cc-abf5-f03d8987b052.jpeg?im_w=1440",
-          userId: 3,
-        },
+
         {
           imageableId: 1,
           imageableType: "User",

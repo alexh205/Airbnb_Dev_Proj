@@ -20,7 +20,7 @@ module.exports = {
           stars: 5,
         },
         {
-          userId: 3,
+          userId: 4,
           spotId: 1,
           review: "I would come back to this spot again!",
           stars: 4,

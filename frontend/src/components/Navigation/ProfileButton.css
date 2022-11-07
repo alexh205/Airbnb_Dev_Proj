@@ -2,7 +2,7 @@
 .dropbtn {
   background-color: #dadee1;
   color: white;
-  padding: 16px;
+  padding: 10px;
   font-size: 16px;
   border-bottom: 1px solid black;
   cursor: pointer;
@@ -25,7 +25,7 @@
 
 
 .text {
-  color: rgb(46, 17, 152);
+  color: rgb(0, 0, 0);
   position: relative;
   width:fit-content;
 
@@ -33,9 +33,19 @@
 
 #logout-button {
   position: relative;
-  width: 120px;
+  width: 100px;
 }
 .inner-components {
   padding: 4px;
   border: 1px solid black;
+  color:darkslategray
+}
+
+
+.profile-dropdown {
+  position: absolute;
+  border: 1px double rgb(0, 0, 0);
+  padding: 2px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
 }

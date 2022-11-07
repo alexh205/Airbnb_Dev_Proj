@@ -1,0 +1,28 @@
+.login-container {
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgb(187, 230, 230);
+  border: 2px double black;
+}
+
+.login-button {
+  font-size: 12px;
+  font-weight: bold;
+  color: #5e02a4;
+  margin: 5px 5px;
+  padding: 3px;
+  border-radius: 10px;
+  text-decoration: solid;
+}
+
+.login-label-fields {
+  color: rgb(22, 6, 78);
+  margin-top: 5px;
+  font-size: 18px;
+}
+
+#login-header {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(86, 5, 118);
+}

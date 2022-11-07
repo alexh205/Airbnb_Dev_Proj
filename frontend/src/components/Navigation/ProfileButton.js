@@ -62,32 +62,50 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
-
   };
 
   if (user)
     return (
       <>
-        <div className="dropdown" id="border-container">
-          <button onClick={openMenu} className="dropbtn" id="dropdown-content">
-            <img src={ProfileImg}></img>
+        <div
+          className="dropdown"
+          id="border-container"
+          style={{ borderRadius: "6px" }}
+        >
+          <button
+            style={{ borderRadius: "6px" }}
+            onClick={openMenu}
+            className="dropbtn"
+            id="dropdown-content"
+          >
+            <img style={{ borderRadius: "6px" }} src={ProfileImg}></img>
           </button>
           {showMenu && (
             <div className="profile-dropdown">
               <div>
-                <label>
+                <label style={{ borderBottom: "1px solid black" }}>
                   Current User:
-                  <p className="text">{user.username}</p>
+                  <p
+                    className="text"
+                    style={{ fontWeight: "bold", color: "blue" }}
+                  >
+                    {user.username}
+                  </p>
                 </label>
               </div>
               <div>
-                <div className="inner-components">{NewListing}</div>
                 <div className="inner-components">{Listings}</div>
                 <div className="inner-components">{Reviews}</div>
+                <div className="inner-components">{NewListing}</div>
               </div>
 
               <div>
                 <button
+                  style={{
+                    backgroundColor: "darkslategray",
+                    borderRadius: "6px",
+                    color: "white",
+                  }}
                   onClick={(e) => {
                     logout(e);
                     history.push("/");

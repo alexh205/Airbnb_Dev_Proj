@@ -42,7 +42,7 @@ function SignupFormPage() {
   return (
     <div className="signUp-container">
       <form className="singUp-form" onSubmit={handleSubmit}>
-        <ul>
+        <ul style={{ marginTop: "2px" }}>
           {errors.map((error, idx) => (
             <li key={idx}>{error}</li>
           ))}
@@ -50,7 +50,17 @@ function SignupFormPage() {
 
         <b>
           <i>
-            <div id="signUp-header">Sign Up</div>
+            <div
+              id="signUp-header"
+              style={{
+                fontWeight: "bold",
+                fontSize: "22px",
+                paddingBottom: "12px",
+                color: "rgb(86, 5, 118)",
+              }}
+            >
+              Sign Up
+            </div>
           </i>
         </b>
         <div className="signUp_div">

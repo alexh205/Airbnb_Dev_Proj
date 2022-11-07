@@ -1,73 +1,98 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import * as reviewActions from "../../store/reviews";
+
 import * as sessionActions from "../../store/session";
 import { Link } from "react-router-dom";
+import "./UserReviews.css";
 
-const SpotReviews = ({ locationId }) => {
+const SpotReviews = ({ reviewsArr, currentUser, spotId }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     // dispatch(reviewActions.renderReviews());
     dispatch(sessionActions.restoreUser());
-    dispatch(reviewActions.getAllReviews(locationId));
-  }, [dispatch, locationId]);
+    // dispatch(reviewActions.getAllReviews(spotId));
+  }, [dispatch]);
 
-  // Selecting the State variables
-  const reviewsObj = useSelector((state) => state.reviews);
-  const reviews = Object.values(reviewsObj);
+  // let foundReviews;
 
-  const userObj = useSelector((state) => state.session.user);
+  if (reviewsArr.length < 1) return <p>No Reviews Found for This Listing.</p>;
 
-  let foundReviews;
-
-  if (reviews.length < 1)
-    return <p>No Reviews Found for This Listing. Login to Add a Review</p>;
-
-  if (reviews.length > 0) {
-    foundReviews = (
-      <div>
-        <div id="my-reviews-container">
-          <div id="userReviews">
-            {reviews &&
-              reviews.map((review) => (
-                <div id="review" key={review.id}>
-                  <div>
-                    <p>⭐ {review.stars} Stars</p>
-                  </div>
-                  <div>
-                    <p>
-                      {review.User && review.User.firstName} {''}
-                      {review.User && review.User.lastName}
-                    </p>
-                  </div>
-                  <div>
-                    <p>{review.review}</p>
-                  </div>
-                  <div id="updated-at">
-                    Updated on: {review.updatedAt.slice(0, 10)}
-                  </div>
-                  {userObj && userObj.id === review.userId && (
-                    <>
-                      <div id="edit-container">
-                        <Link to={`/review-edit/${review?.id}`}>
-                          <button>Edit</button>
-                        </Link>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (reviews)
+  if (reviewsArr)
     return (
       <div>
-        <div>{foundReviews}</div>
+        <div>
+          <div>
+            <div className="my-reviews-container">
+              <div id="userReviews">
+                {reviewsArr &&
+                  reviewsArr.map((review) => (
+                    <div
+                      className="review-items"
+                      key={review.id}
+                      // style={{
+                      //   display: "grid",
+                      //   overflow: "auto",
+                      //   padding: "6px",
+                      //   border: "1px dotted black",
+                      // }}
+                    >
+                      {review.User && (
+                        <>
+                          <div>
+                            <p>
+                              {review.User && review.User.firstName}{" "}
+                              {review.User && review.User.lastName}
+                            </p>
+                          </div>
+
+                          <div>
+                            <i
+                              style={{
+                                fontWeight: "bold",
+                                fontSize: "18px",
+                                color: "blue",
+                              }}
+                            >
+                              Review:{" "}
+                            </i>
+                            <p style={{ overflow: "auto" }}>
+                              "{review.review}"
+                            </p>
+                          </div>
+                          <div>
+                            <p style={{ margin: "2px" }}>
+                              ⭐ {review.stars} Stars
+                            </p>
+                          </div>
+                          {/* <div id="updated-at">
+                            Updated on: {review.updatedAt.slice(0, 10)}
+                          </div> */}
+                          {currentUser && currentUser.id === review.userId && (
+                            <>
+                              <div id="edit-container">
+                                <Link to={`/review-edit/${review?.id}`}>
+                                  <button
+                                    style={{
+                                      backgroundColor: "rgb(15, 174, 31)",
+                                      color: "white",
+                                      fontWeight: "bold",
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                </Link>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
 };

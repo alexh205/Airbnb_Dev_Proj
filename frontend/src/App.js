@@ -8,7 +8,7 @@ import Navigation from "./components/Navigation";
 import SpotsPage from "./components/Spots";
 import EditSpotForm from "./components/Spots/EditSpotForm";
 import SpotForm from "./components/Spots/SpotForm";
-import SpotDetail from "./components/Spots/SpotDetail";
+import SpotDetail from "./components/SingleSpotPage/index";
 import UserSpots from "./components/Spots/UserSpots";
 import ReviewForm from "./components/Reviews/ReviewForm";
 import UserReviews from "./components/Reviews/UserReviews";

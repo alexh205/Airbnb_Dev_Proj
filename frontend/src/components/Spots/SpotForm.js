@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import * as spotActions from "../../store/spots";
+import "./UserSpots.css";
 
 const SpotForm = () => {
   const dispatch = useDispatch();
@@ -111,8 +112,25 @@ const SpotForm = () => {
   };
 
   return (
-    <div>
-      <h2>Create a New Spot</h2>
+    <div
+      style={{
+        "margin-left": "200px",
+        "margin-right": "200px",
+      }}
+    >
+      <h2
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          borderBottom: "1px solid black",
+          paddingBottom: "5px",
+          marginLeft: "100px",
+          marginRight: "100px",
+          color: "green",
+        }}
+      >
+        Create a New Listing
+      </h2>
       {hasSubmitted && errors.length > 0 && (
         <div>
           The following errors were found:
@@ -124,124 +142,137 @@ const SpotForm = () => {
         </div>
       )}
       <form className="spots-app" onSubmit={handleSubmit}>
-        <div>
-          <label>
+        <div className="form-padding">
+          <label className="padding-label">
             Name
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              // required
+              required
               placeholder="Name"
             />
-            <p> {errors.name}</p>
           </label>
         </div>
         <div>
-          <label>
+          <label className="padding-label">
             Address:
             <input
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              // required
+              required
               placeholder="Address"
             />
           </label>
         </div>
         <div>
-          <label>
+          <label className="padding-label">
             City:
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              // required
+              required
               placeholder="City"
             />
           </label>
         </div>
         <div>
-          <label>
+          <label className="padding-label">
             State:
             <input
               type="text"
               value={state}
               onChange={(e) => setState(e.target.value)}
-              // required
+              required
               placeholder="State"
             />
           </label>
         </div>
         <div>
-          <label>
+          <label className="padding-label">
             Country:
             <input
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
-              // required
+              required
               placeholder="Country"
             />
           </label>
         </div>
-        <label>
-          Latitude:
-          <input
-            type="text"
-            value={lat}
-            onChange={(e) => setLat(e.target.value)}
-            // required
-            placeholder="Latitude"
-          />
-        </label>
-        <label>
-          Longitude:
-          <input
-            type="text"
-            value={lng}
-            onChange={(e) => setLng(e.target.value)}
-            // required
-            placeholder="Longitude"
-          />
-        </label>
         <div>
-          <label>
+          <label className="padding-label">
+            Latitude:
+            <input
+              type="text"
+              value={lat}
+              onChange={(e) => setLat(e.target.value)}
+              required
+              placeholder="Latitude"
+            />
+          </label>
+        </div>
+        <div>
+          <label className="padding-label">
+            Longitude:
+            <input
+              type="text"
+              value={lng}
+              onChange={(e) => setLng(e.target.value)}
+              required
+              placeholder="Longitude"
+            />
+          </label>
+        </div>
+        <div>
+          <label className="padding-label">
             Description:
             <input
               type="textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              // required
+              required
               placeholder="Description"
             />
           </label>
         </div>
         <div>
-          <label>
-            Price:
+          <label className="padding-label">
+            Price: $
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
-              // required
+              required
               placeholder="$ Price"
             />
           </label>
         </div>
         <div>
-          <label>
+          <label className="padding-label">
             Preview Image:
             <input
               type="text"
               value={previewImage}
               onChange={(e) => setPreviewImage(e.target.value)}
-              // required
+              required
               placeholder="url"
             />
           </label>
         </div>
-        <input type="submit" />
+        <input
+          type="submit"
+          style={{
+            backgroundColor: "rgb(208, 46, 31)",
+            color: "white",
+            fontWeight: "bold",
+            padding: "4px",
+            width: "80px",
+            marginTop: "8px",
+          }}
+        />
       </form>
     </div>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import * as spotActions from "../../store/spots";
 import * as sessionActions from "../../store/session";
 import * as reviewActions from "../../store/reviews";
-import "./Spots.css";
+import "./AllSpots.css";
 
 const SpotsPage = () => {
   const dispatch = useDispatch();

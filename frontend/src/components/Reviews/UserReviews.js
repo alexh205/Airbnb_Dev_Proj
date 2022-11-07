@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as reviewActions from "../../store/reviews";
+import "./UserReviews.css";
 
 const UserReviews = () => {
   const dispatch = useDispatch();
@@ -19,56 +20,78 @@ const UserReviews = () => {
     return (
       <>
         {reviewList && (
-          <div id="wrapper">
+          <div className="wrapper">
+            <div className="myReviews-header">
+              <Link to={`/`}>
+                <button className="button-reviews">Home Page</button>
+              </Link>
+              <Link to={`/userSpots`}>
+                <button className="button-reviews">My Listings</button>
+              </Link>
+              <Link to={`/spots`}>
+                <button className="button-reviews">Host your Property</button>
+              </Link>
+            </div>
             <div id="my-spots-header">
-              <div>
-                <Link to={`/userSpots`}>
-                  <button>My Listings</button>
-                </Link>
+              <div
+                id="my-reviews-header"
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginRight: '200px'
+                }}
+              >
+                <h1>My Reviews</h1>
               </div>
             </div>
-            <div id="my-newSpots-header">
-              <div>
-                <Link to={`/spots`}>
-                  <button>Host your Property</button>
-                </Link>
-              </div>
-            </div>
-            <div id="my-reviews-header">
-              <h1>My Reviews</h1>
-            </div>
-            <div id="my-reviews-container">
-              <div id="myReviews" key="myreviews">
-                {reviewList &&
-                  reviewsArr.map((review) => (
-                    <div id="review" key={review.id}>
-                      <div id="spot-name">
+
+            <div className="myReviews-container">
+              {reviewList &&
+                reviewsArr.map((review) => (
+                  <div className="review-spots" key={review.id}>
+                    <div className="spot-name">
+                      {review && review.Spot?.name && (
                         <Link to={`/spots/${review.spotId}`}>
-                          <p>Review ID# {review.id}</p>
+                          <p style={{ fontSize: "20px", overflow: "auto" }}>
+                            Spot - {review.Spot.name}
+                          </p>
                         </Link>
-                      </div>
-
-                      <div>
-                        <i className="fa-regular fa-star"> </i>
-                        {review.stars}
-                      </div>
-
-                      <div>{review.review}</div>
-                      <div id="updated-at">
-                        Updated At: {review.updatedAt.slice(0, 10)}
-                      </div>
-                      <div id="created-at">
-                        Updated At: {review.createdAt.slice(0, 10)}
-                      </div>
-
-                      <div id="edit-container">
-                        <Link to={`/review-edit/${review.id}`}>
-                          <button>Edit</button>
-                        </Link>
-                      </div>
+                      )}
                     </div>
-                  ))}
-              </div>
+
+                    <div style={{ overflow: "auto", paddingBottom: "4px" }}>
+                      <i> </i>⭐ {review.stars}
+                    </div>
+
+                    <div style={{ overflow: "auto", paddingBottom: "4px" }}>
+                      <i style={{ fontWeight: "bold", fontSize: "20px" , color: 'blue'}}>
+                        Review:{" "}
+                      </i>{" "}
+                      "{review.review}"
+                    </div>
+                    <div style={{ overflow: "auto", padding: "4px" }}>
+                      Updated At: {review.updatedAt.slice(0, 10)}
+                    </div>
+                    <div style={{ overflow: "auto", padding: "4px" }}>
+                      Created on: {review.createdAt.slice(0, 10)}
+                    </div>
+
+                    <div id="edit-container">
+                      <Link to={`/review-edit/${review.id}`}>
+                        <button
+                          style={{
+                            backgroundColor: "rgb(15, 174, 31)",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          Edit
+                        </button>
+                      </Link>
+                    </div>
+                  </div>
+                ))}
             </div>
           </div>
         )}

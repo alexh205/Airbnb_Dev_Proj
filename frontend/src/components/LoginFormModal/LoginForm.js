@@ -33,29 +33,45 @@ function LoginForm() {
           ))}
         </ul>
         <b>
-          <i>
-            <div id="login-header">Login</div>
+          <i
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderBottom: "1px solid black",
+              
+            }}
+          >
+            <div id="login-header" style={{ paddingBottom: "12px" }}>
+              Login
+            </div>
           </i>
         </b>
-        <label className="login-label-fields">
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label className="login-label-fields">
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <button type="submit">Log In</button>
+        <div>
+          <label className="login-label-fields">
+            Username or Email:
+            <input
+              type="text"
+              value={credential}
+              onChange={(e) => setCredential(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <div>
+          <label className="login-label-fields">
+            Password:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+        </div>
+        <button type="submit" className="login-button">
+          Log In
+        </button>
       </form>
     </div>
   );
