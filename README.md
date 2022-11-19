@@ -22,7 +22,6 @@ A clone of the popular hosting site [AirBnB](airbnb.com). Users on AirBnB are ab
 * ![Sequelize](https://img.shields.io/badge/-Sequelize-52B0E7?logo=sequelize&logoColor=white&style=for-the-badge&logoWidth=30)
 * ![SQLITE](https://img.shields.io/badge/-Sqlite-003B57?logo=sqlite&logoColor=white&style=for-the-badge&logoWidth=30)
 * ![NPM](https://img.shields.io/badge/-NPM-CB3837?logo=npm&logoColor=white&style=for-the-badge&logoWidth=30)
-* ![Python Badge](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff&style=flat)
 
 
 
