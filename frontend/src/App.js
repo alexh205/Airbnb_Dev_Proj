@@ -28,7 +28,9 @@ function App() {
 
   return (
     <>
+
       <Navigation isLoaded={isLoaded} />
+      <main>
       {isLoaded && (
         <Switch>
           <Route exact path="/" component={SpotsPage} />
@@ -41,7 +43,8 @@ function App() {
           <Route path="/review-edit/:reviewId" component={EditReviews} />
           <Route path="/spot-edit/:spotId" component={EditSpotForm} />
         </Switch>
-      )}
+      )}</main>
+      
       <Footer />
     </>
   );
